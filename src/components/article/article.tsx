@@ -4,7 +4,7 @@ import { IArticleProps } from "../../types";
 
 function Article({ title, body, tagList, favoritesCount }: IArticleProps) {
   return (
-    <div className={styles.article}>
+    <li className={styles.article}>
       <div className={styles.textContainer}>
         <div className={styles.articleTitleLikesContainer}>
           <h2 className={styles.articleTitle}>{title}</h2>
@@ -25,7 +25,7 @@ function Article({ title, body, tagList, favoritesCount }: IArticleProps) {
         <p className={styles.articleText}>{body}</p>
       </div>
       <UserInfo />
-    </div>
+    </li>
   );
 }
 

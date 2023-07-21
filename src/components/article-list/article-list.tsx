@@ -6,6 +6,7 @@ import { useState } from "react";
 
 function ArticleList() {
   const [currentOffset, setCurrentOffset] = useState(0);
+
   const pageSize = 5;
 
   const handlePageChange = (page: number) => {
@@ -28,10 +29,9 @@ function ArticleList() {
           <Spin
             size="large"
             style={{
-              position: "fixed",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
+              height: 50,
+              position: "relative",
+              transform: "translate(0, 50%)",
             }}
           />
         ) : (
