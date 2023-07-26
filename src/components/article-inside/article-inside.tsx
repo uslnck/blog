@@ -11,7 +11,7 @@ function ArticleInside({ articles }: IArticleInsideProps) {
 
   if (!article) return <NotFound />;
 
-  const { title, body, tagList, favoritesCount } = article;
+  const { title, body, favoritesCount } = article;
 
   return (
     <div className={styles.articleInsideContainer}>
@@ -21,11 +21,11 @@ function ArticleInside({ articles }: IArticleInsideProps) {
           <button className={styles.likeButton}>
             <img src="../../heart.svg" alt="heart" />
           </button>
-          <span className={styles.likeCount}>{}</span>
+          <span className={styles.likeCount}>{favoritesCount}</span>
         </div>
       </div>
       <ul className={styles.tagContainer}></ul>
-      <p className={styles.articleText}>{}</p>
+      <p className={styles.articleText}>{body}</p>
       <UserInfo />
     </div>
   );
