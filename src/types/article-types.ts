@@ -1,10 +1,17 @@
 export interface IArticleProps {
-  key: number;
   title: string;
-  description: string;
   body: string;
   tagList: string[];
   favoritesCount: number;
+  slug: string;
+}
+
+export interface IArticleListProps {
+  articles: IArticle[];
+}
+
+export interface IArticleInsideProps {
+  articles: IArticle[];
 }
 
 export interface IArticle {

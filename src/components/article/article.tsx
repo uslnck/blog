@@ -1,13 +1,22 @@
 import styles from "./article.module.less";
 import UserInfo from "../user-info";
 import { IArticleProps } from "../../types";
+import { Link } from "react-router-dom";
 
-function Article({ title, body, tagList, favoritesCount }: IArticleProps) {
+function Article({
+  title,
+  body,
+  tagList,
+  favoritesCount,
+  slug,
+}: IArticleProps) {
   return (
     <li className={styles.article}>
       <div className={styles.textContainer}>
         <div className={styles.articleTitleLikesContainer}>
-          <h2 className={styles.articleTitle}>{title}</h2>
+          <Link to={`/articles/${slug}`} className={styles.articleTitle}>
+            {title}
+          </Link>
           <div className={styles.articleLikesContainer}>
             <button className={styles.likeButton}>
               <img src="../../heart.svg" alt="heart" />

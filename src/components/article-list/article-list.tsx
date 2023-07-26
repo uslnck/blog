@@ -1,62 +1,21 @@
 import styles from "./article-list.module.less";
 import Article from "../article";
-import { useGetArticlesQuery } from "../../store/search-api";
-import { Pagination, Spin } from "antd";
-import { useState } from "react";
+import { IArticleListProps } from "../../types";
 
-function ArticleList() {
-  const [currentOffset, setCurrentOffset] = useState(0);
-
-  const pageSize = 5;
-
-  const handlePageChange = (page: number) => {
-    setCurrentOffset((page - 1) * pageSize);
-  };
-
-  const {
-    data: articlesObject = { articles: [] },
-    isFetching,
-    // refetch,
-  } = useGetArticlesQuery(currentOffset);
-  const { articles } = articlesObject;
-
-  console.log(articles);
-
+function ArticleList({ articles }: IArticleListProps) {
   return (
-    <>
-      <ul className={styles.articleList}>
-        {isFetching ? (
-          <Spin
-            size="large"
-            style={{
-              height: 50,
-              position: "relative",
-              transform: "translate(0, 50%)",
-            }}
-          />
-        ) : (
-          articles.map((article, i) => (
-            <Article
-              key={i}
-              title={article.title}
-              description={article.description}
-              body={article.body}
-              tagList={article.tagList}
-              favoritesCount={article.favoritesCount}
-            />
-          ))
-        )}
-      </ul>
-      <div className={styles.paginationContainer}>
-        <Pagination
-          showSizeChanger={false}
-          // current={currentPage}
-          pageSize={pageSize}
-          total={pageSize * 5}
-          onChange={(page) => handlePageChange(page)}
+    <ul className={styles.articleList}>
+      {articles.map((article, i) => (
+        <Article
+          key={i}
+          title={article.title}
+          body={article.body}
+          tagList={article.tagList}
+          favoritesCount={article.favoritesCount}
+          slug={article.slug}
         />
-      </div>
-    </>
+      ))}
+    </ul>
   );
 }
 

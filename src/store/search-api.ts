@@ -6,10 +6,12 @@ import {
 } from "@reduxjs/toolkit/query/react";
 import { IResponse } from "../types";
 
+export const baseUrl = "https://blog.kata.academy/api";
+
 const staggeredBaseQueryWithBailOut = retry(
   async (args: string | FetchArgs, api, extraOptions) => {
     const result = await fetchBaseQuery({
-      baseUrl: "https://blog.kata.academy/api",
+      baseUrl: baseUrl,
     })(args, api, extraOptions);
 
     if (result.error?.status === 404) retry.fail(result.error);
