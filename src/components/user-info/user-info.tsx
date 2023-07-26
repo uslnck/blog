@@ -1,14 +1,17 @@
+import { IUserInfo } from "../../types";
 import styles from "./user-info.module.less";
+import { formatDate } from "../../utils/helpers/date-fns";
 
-function UserInfo() {
+function UserInfo({ author, createdAt }: IUserInfo) {
+  const { username, bio, image, following } = author;
   return (
     <div className={styles.userContainer}>
       <div className={styles.userInfoContainer}>
-        <span className={styles.userName}>John Doe</span>
-        <span className={styles.dateRegistered}>March 5, 2020</span>
+        <span className={styles.userName}>{username}</span>
+        <span className={styles.dateRegistered}>{formatDate(createdAt)}</span>
       </div>
       <div className={styles.userAvatarContainer}>
-        <img className={styles.userAvatar} src="../../avatar.png" alt="logo" />
+        <img className={styles.userAvatar} src={image} alt="logo" />
       </div>
     </div>
   );

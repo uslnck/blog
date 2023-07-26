@@ -1,20 +1,40 @@
 import styles from "./article.module.less";
 import UserInfo from "../user-info";
-import { IArticleProps } from "../../types";
+import { IArticle } from "../../types";
 import { Link } from "react-router-dom";
 
 function Article({
-  title,
+  author,
   body,
-  tagList,
+  createdAt,
+  description,
+  favorited,
   favoritesCount,
   slug,
-}: IArticleProps) {
+  tagList,
+  title,
+  updatedAt,
+}: IArticle) {
   return (
     <li className={styles.article}>
       <div className={styles.textContainer}>
         <div className={styles.articleTitleLikesContainer}>
-          <Link to={`/articles/${slug}`} className={styles.articleTitle}>
+          <Link
+            to={`/articles/${slug}`}
+            className={styles.articleTitle}
+            state={{
+              author,
+              body,
+              createdAt,
+              description,
+              favorited,
+              favoritesCount,
+              slug,
+              tagList,
+              title,
+              updatedAt,
+            }}
+          >
             {title}
           </Link>
           <div className={styles.articleLikesContainer}>
@@ -33,7 +53,7 @@ function Article({
         </ul>
         <p className={styles.articleText}>{body}</p>
       </div>
-      <UserInfo />
+      <UserInfo author={author} createdAt={createdAt} />
     </li>
   );
 }
