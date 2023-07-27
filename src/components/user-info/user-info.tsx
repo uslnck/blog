@@ -3,7 +3,7 @@ import styles from "./user-info.module.less";
 import { formatDate } from "../../utils/helpers/date-fns";
 
 function UserInfo({ author, createdAt }: IUserInfo) {
-  const { username, bio, image, following } = author;
+  const { username, image /*following, bio*/ } = author;
   return (
     <div className={styles.userContainer}>
       <div className={styles.userInfoContainer}>
