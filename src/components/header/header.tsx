@@ -9,8 +9,10 @@ export default function Header() {
           Realworld Blog
         </Link>
         <div className={styles.signContainer}>
+          <Link className={styles.signUp} to={"/sign-up"}>
+            Sign Up
+          </Link>
           <button className={styles.signIn}>Sign In</button>
-          <button className={styles.signUp}>Sign Up</button>
         </div>
       </div>
     </header>

@@ -3,7 +3,6 @@ import Article from "../article";
 import { useGetArticlesQuery } from "../../store";
 import { Pagination, Spin } from "antd";
 import { IArticleListProps } from "../../types";
-// import SignUp from "../sign-up";
 
 export default function ArticleList({
   currentOffset,
@@ -23,7 +22,6 @@ export default function ArticleList({
 
   return (
     <>
-      {/* <SignUp /> */}
       <ul className={styles.articleList}>
         {isFetching ? (
           <Spin
