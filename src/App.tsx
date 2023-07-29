@@ -2,7 +2,7 @@ import "./App.less";
 import Header from "./components/header";
 import Main from "./components/main";
 
-function Blog() {
+export default function Blog() {
   return (
     <>
       <Header />
@@ -10,5 +10,3 @@ function Blog() {
     </>
   );
 }
-
-export default Blog;

@@ -1,6 +1,6 @@
 import { Result } from "antd";
 
-function NotFound() {
+export default function NotFound() {
   return (
     <Result
       status="404"
@@ -9,5 +9,3 @@ function NotFound() {
     />
   );
 }
-
-export default NotFound;

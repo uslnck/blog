@@ -8,7 +8,7 @@ import { useState } from "react";
 const pageSize = 5;
 const pagesCount = 5;
 
-function Main() {
+export default function Main() {
   const [currentOffset, setCurrentOffset] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -43,5 +43,3 @@ function Main() {
     </main>
   );
 }
-
-export default Main;

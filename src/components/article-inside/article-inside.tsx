@@ -3,8 +3,9 @@ import UserInfo from "../user-info";
 import { useLocation } from "react-router-dom";
 import { IArticle } from "../../types";
 import NotFound from "../not-found";
+import Markdown from "markdown-to-jsx";
 
-function ArticleInside() {
+export default function ArticleInside() {
   const location = useLocation();
   const state = location.state as IArticle;
 
@@ -48,15 +49,15 @@ function ArticleInside() {
               </li>
             ))}
           </ul>
-          <p className={styles.articleInsideText}>{body}</p>
+          <p className={styles.articleInsideText}>{description}</p>
         </div>
         <div className={styles.userInfoInsideContainer}>
           <UserInfo author={author} createdAt={createdAt} />
         </div>
       </div>
-      <p className={styles.descriptionInsideText}>{description}</p>
+      <div className={styles.descriptionInsideText}>
+        <Markdown>{body}</Markdown>
+      </div>
     </div>
   );
 }
-
-export default ArticleInside;

@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import styles from "./header.module.less";
 
-function Header() {
+export default function Header() {
   return (
     <header>
       <div className={styles.headerContainer}>
@@ -16,5 +16,3 @@ function Header() {
     </header>
   );
 }
-
-export default Header;

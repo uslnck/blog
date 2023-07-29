@@ -3,7 +3,7 @@ import UserInfo from "../user-info";
 import { IArticle } from "../../types";
 import { Link } from "react-router-dom";
 
-function Article({
+export default function Article({
   author,
   body,
   createdAt,
@@ -51,11 +51,9 @@ function Article({
             </li>
           ))}
         </ul>
-        <p className={styles.articleText}>{body}</p>
+        <p className={styles.articleText}>{description}</p>
       </div>
       <UserInfo author={author} createdAt={createdAt} />
     </li>
   );
 }
-
-export default Article;

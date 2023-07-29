@@ -3,8 +3,9 @@ import Article from "../article";
 import { useGetArticlesQuery } from "../../store";
 import { Pagination, Spin } from "antd";
 import { IArticleListProps } from "../../types";
+// import SignUp from "../sign-up";
 
-function ArticleList({
+export default function ArticleList({
   currentOffset,
   currentPage,
   handlePageChange,
@@ -22,6 +23,7 @@ function ArticleList({
 
   return (
     <>
+      {/* <SignUp /> */}
       <ul className={styles.articleList}>
         {isFetching ? (
           <Spin
@@ -62,5 +64,3 @@ function ArticleList({
     </>
   );
 }
-
-export default ArticleList;

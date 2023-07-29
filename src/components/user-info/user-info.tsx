@@ -2,7 +2,7 @@ import { IUserInfo } from "../../types";
 import styles from "./user-info.module.less";
 import { formatDate } from "../../utils/helpers/date-fns";
 
-function UserInfo({ author, createdAt }: IUserInfo) {
+export default function UserInfo({ author, createdAt }: IUserInfo) {
   const { username, image /*following, bio*/ } = author;
   return (
     <div className={styles.userContainer}>
@@ -16,5 +16,3 @@ function UserInfo({ author, createdAt }: IUserInfo) {
     </div>
   );
 }
-
-export default UserInfo;
