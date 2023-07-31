@@ -4,6 +4,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { IFormData } from "../../types";
 import { useCreateUserMutation } from "../../store";
 import { useNavigate } from "react-router-dom";
+import { Spin } from "antd";
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -16,7 +17,8 @@ export default function SignUp() {
 
   const watchPassword = watch("password", "");
 
-  const [createUser, { isError, isSuccess, data }] = useCreateUserMutation();
+  const [createUser, { isLoading, isError, isSuccess, data }] =
+    useCreateUserMutation();
 
   const onSubmit: SubmitHandler<IFormData> = async (formData) => {
     const userData = {
@@ -27,16 +29,17 @@ export default function SignUp() {
       personalData: {},
     };
     await createUser(userData);
-    if (isSuccess) {
-      console.log("POST created; data:", data);
-      navigate("/sign-in");
-    }
   };
+
+  if (isSuccess) {
+    console.log("POST created; data:", data);
+    navigate("/sign-in");
+  }
 
   return (
     <form
       className={styles.signUpContainer}
-      onSubmit={void handleSubmit(onSubmit)}
+      onSubmit={(e) => void handleSubmit(onSubmit)(e)}
     >
       <h2 className={styles.signUpHeader}>Create new account</h2>
       {isError ? (
@@ -45,9 +48,10 @@ export default function SignUp() {
         false
       )}
       <div className={styles.inputGroup}>
-        <label>Username</label>
+        <label htmlFor="username">Username</label>
         <input
           type="text"
+          id="username"
           className={errors.username ? styles.inputErrorBorder : ""}
           {...register("username", {
             required: "Username is required",
@@ -139,10 +143,13 @@ export default function SignUp() {
           {errors?.personalData.message}
         </p>
       )}
-
-      <button type="submit" className={styles.createButton}>
-        Create
-      </button>
+      {isLoading ? (
+        <Spin size="large" />
+      ) : (
+        <button type="submit" className={styles.createButton}>
+          Create
+        </button>
+      )}
       <p className={styles.haveAccountParagraph}>
         Already have an account? <Link to="/sign-in">Sign In</Link>
       </p>
