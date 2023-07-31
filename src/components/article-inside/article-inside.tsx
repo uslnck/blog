@@ -56,7 +56,7 @@ export default function ArticleInside() {
         </div>
       </div>
       <div className={styles.descriptionInsideText}>
-        <Markdown>{body}</Markdown>
+        <Markdown>{body || "No article text provided!"}</Markdown>
       </div>
     </div>
   );

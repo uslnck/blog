@@ -5,6 +5,7 @@ import { Routes, Route } from "react-router-dom";
 import NotFound from "../not-found";
 import { useState } from "react";
 import SignUp from "../sign-up";
+import SignIn from "../sign-in";
 
 const pageSize = 5;
 const pagesCount = 5;
@@ -38,6 +39,7 @@ export default function Main() {
             />
           ))}
           <Route path="/articles/:slug" element={<ArticleInside />} />
+          <Route path="/sign-in" element={<SignIn />} />
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

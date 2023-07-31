@@ -4,7 +4,7 @@ import {
   retry,
   FetchArgs,
 } from "@reduxjs/toolkit/query/react";
-import { IResponse } from "../types";
+import { IFormData, IGetArticlesResponse, ISignUpResponse } from "../types";
 
 export const baseUrl = "https://blog.kata.academy/api";
 
@@ -14,9 +14,10 @@ const staggeredBaseQueryWithBailOut = retry(
       baseUrl: baseUrl,
     })(args, api, extraOptions);
 
-    if (result.error?.status === 404) retry.fail(result.error);
-    if (result.error?.status === 500)
-      console.log("Server error, refetching...");
+    if (result.error?.status === 422) {
+      console.log("User already exists or something unexpected happened");
+      retry.fail(result.error);
+    }
 
     return result;
   },
@@ -27,10 +28,17 @@ export const searchApi = createApi({
   reducerPath: "searchApi",
   baseQuery: staggeredBaseQueryWithBailOut,
   endpoints: (build) => ({
-    getArticles: build.query<IResponse, number>({
+    getArticles: build.query<IGetArticlesResponse, number>({
       query: (offset) => `/articles?limit=5&offset=${offset}`,
+    }),
+    createUser: build.mutation<ISignUpResponse, IFormData>({
+      query: (formData) => ({
+        url: "/users",
+        method: "POST",
+        body: { user: formData },
+      }),
     }),
   }),
 });
 
-export const { useGetArticlesQuery } = searchApi;
+export const { useGetArticlesQuery, useCreateUserMutation } = searchApi;
