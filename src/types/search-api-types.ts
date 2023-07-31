@@ -4,20 +4,25 @@ export interface IGetArticlesResponse {
   articles: IArticle[];
 }
 
-export interface IFormData {
-  username: string;
+export interface ILoginData {
   email: string;
   password: string;
+}
+
+export interface IFormData {
+  email: string;
+  password: string;
+  username: string;
   repeatPassword: string | object;
   personalData: boolean | object;
 }
 
-export interface ISignUpResponse {
+export interface ISignResponse {
   user: {
     username: string;
     email: string;
     token: string;
-    image: null | string;
+    image: string;
     bio: string;
   };
 }

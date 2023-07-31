@@ -8,6 +8,7 @@ import { Spin } from "antd";
 
 export default function SignUp() {
   const navigate = useNavigate();
+
   const {
     handleSubmit,
     watch,
@@ -50,8 +51,9 @@ export default function SignUp() {
       <div className={styles.inputGroup}>
         <label htmlFor="username">Username</label>
         <input
-          type="text"
           id="username"
+          type="text"
+          autoComplete="on"
           className={errors.username ? styles.inputErrorBorder : ""}
           {...register("username", {
             required: "Username is required",
@@ -71,9 +73,11 @@ export default function SignUp() {
       </div>
 
       <div className={styles.inputGroup}>
-        <label>Email</label>
+        <label htmlFor="email">Email</label>
         <input
+          id="email"
           type="text"
+          autoComplete="on"
           className={errors.email ? styles.inputErrorBorder : ""}
           {...register("email", {
             required: "Email is required",
@@ -89,8 +93,9 @@ export default function SignUp() {
       </div>
 
       <div className={styles.inputGroup}>
-        <label>Password</label>
+        <label htmlFor="password">Password</label>
         <input
+          id="password"
           type="password"
           className={errors.password ? styles.inputErrorBorder : ""}
           {...register("password", {
@@ -111,8 +116,9 @@ export default function SignUp() {
       </div>
 
       <div className={styles.inputGroup}>
-        <label>Repeat Password</label>
+        <label htmlFor="repeatPassword">Repeat Password</label>
         <input
+          id="repeatPassword"
           type="password"
           className={errors.repeatPassword ? styles.inputErrorBorder : ""}
           {...register("repeatPassword", {
@@ -129,6 +135,7 @@ export default function SignUp() {
 
       <div className={styles.personalDataGroup}>
         <input
+          id="personalData"
           type="checkbox"
           {...register("personalData", {
             validate: (value) =>
@@ -136,7 +143,9 @@ export default function SignUp() {
               "Consent to personal data processing is required",
           })}
         />
-        <label>I agree to the processing of my personal information</label>
+        <label htmlFor="personalData">
+          I agree to the processing of my personal information
+        </label>
       </div>
       {errors.personalData && (
         <p className={`${styles.validationError} ${styles.lessMargin}`}>

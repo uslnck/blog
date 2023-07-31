@@ -1,5 +1,14 @@
 @import "../../main.less";
 
+.validationError {
+  font-size: 14px;
+  color: red;
+}
+
+.lessMargin {
+  margin-top: -10px;
+}
+
 .signUpContainer {
   width: 320px;
   border-radius: 6px;
@@ -18,7 +27,6 @@
   gap: 12px;
   margin-bottom: 77px;
   font-family: Roboto;
-  color: #202020;
   .signUpHeader {
     color: var(--grey-grey-9, #262626);
     text-align: center;
@@ -28,6 +36,9 @@
   }
 
   .inputGroup {
+    .inputErrorBorder {
+      border: 1px solid red;
+    }
     label {
       color: var(--grey-grey-9, #262626);
       margin-bottom: 5px;
@@ -41,12 +52,18 @@
     input {
       width: 100%;
       padding: 8px;
+      background: var(--grey-grey-1, #fff);
       border: 1px solid #ccc;
       border-radius: 4px;
+      color: #262626;
+      &[type="password"] {
+        font-size: 28px;
+        height: 40px;
+      }
     }
   }
 
-  .personalDataCheckbox {
+  .personalDataGroup {
     display: flex;
     gap: 8px;
     input {

@@ -8,6 +8,7 @@ export default function Header() {
         <Link className={styles.title} to={"/articles"}>
           Realworld Blog
         </Link>
+        {/* user ? createArticle : signIn*/}
         <div className={styles.signContainer}>
           <Link className={styles.signIn} to={"/sign-in"}>
             Sign In
