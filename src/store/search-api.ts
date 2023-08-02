@@ -9,18 +9,25 @@ import {
   ILoginData,
   IGetArticlesResponse,
   ISignResponse,
+  IUpdateFormQueryData,
 } from "../types";
-
-export const baseUrl = "https://blog.kata.academy/api";
 
 const staggeredBaseQueryWithBailOut = retry(
   async (args: string | FetchArgs, api, extraOptions) => {
     const result = await fetchBaseQuery({
-      baseUrl: baseUrl,
+      baseUrl: "https://blog.kata.academy/api",
     })(args, api, extraOptions);
 
     if (result.error?.status === 422) {
-      console.log("User already exists or something unexpected happened");
+      console.log("User already exists or login credentials are wrong");
+      retry.fail(result.error);
+    }
+    if (result.error?.status === 401) {
+      console.log("Unauthorized");
+      retry.fail(result.error);
+    }
+    if (result.error?.status === 500) {
+      console.log("Server error");
       retry.fail(result.error);
     }
 
@@ -50,6 +57,27 @@ export const searchApi = createApi({
         body: { user: loginData },
       }),
     }),
+    getUser: build.query<ISignResponse, string>({
+      query: (token) => ({
+        url: "/user",
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      }),
+    }),
+    updateUser: build.mutation<ISignResponse, IUpdateFormQueryData>({
+      query: ({ formData, token }) => {
+        console.log(formData, token);
+        return {
+          url: "/user",
+          method: "PUT",
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+          body: { formData },
+        };
+      },
+    }),
   }),
 });
 
@@ -57,4 +85,6 @@ export const {
   useGetArticlesQuery,
   useCreateUserMutation,
   useLoginUserMutation,
+  useGetUserQuery,
+  useUpdateUserMutation,
 } = searchApi;

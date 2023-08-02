@@ -2,8 +2,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { ISignResponse, IUserSliceState } from "../types";
 
 const initialState: IUserSliceState = {
-  userData: { email: "", token: "", username: "", bio: "", image: "" },
-  user: false,
+  user: { email: "", token: "", username: "", bio: "", image: "" },
 };
 
 const userSlice = createSlice({
@@ -11,11 +10,12 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     addUser: (state, action: PayloadAction<ISignResponse>) => {
-      state.userData.email = action.payload.user.email;
-      state.userData.token = action.payload.user.token;
-      state.userData.username = action.payload.user.username;
-      state.userData.bio = action.payload.user.bio;
-      state.userData.image = action.payload.user.image;
+      state.user.email = action.payload.user.email;
+      state.user.token = action.payload.user.token;
+      state.user.username = action.payload.user.username;
+      // state.user = action.payload.user
+      // state.userData.bio = action.payload.user.bio;
+      // state.userData.image = action.payload.user.image;
     },
   },
 });

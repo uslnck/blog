@@ -17,6 +17,26 @@ export interface IFormData {
   personalData: boolean | object;
 }
 
+export interface IUpdateFormQueryData {
+  formData: {
+    email: string;
+    bio: string | object;
+    repeatPassword: string | object;
+    username: string;
+    image: string;
+  };
+  token: string;
+}
+
+export interface IUpdateFormData {
+  email: string;
+  password: string;
+  repeatPassword: string | object;
+  username: string;
+  image: string;
+  token: string;
+}
+
 export interface ISignResponse {
   user: {
     username: string;

@@ -1,10 +1,9 @@
 export interface IUserSliceState {
-  userData: {
+  user: {
     email: string;
     token: string;
     username: string;
     bio: string;
     image: string;
   };
-  user: boolean;
 }

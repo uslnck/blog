@@ -2,13 +2,13 @@ import { Link, useNavigate } from "react-router-dom";
 import styles from "./sign-in.module.less";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { ILoginData } from "../../types";
-import { useAppDispatch, useLoginUserMutation } from "../../store";
+import { /*useAppDispatch*/ useLoginUserMutation } from "../../store";
 import { Spin } from "antd";
-import { addUser } from "../../store/user-slice";
+// import { addUser } from "../../store/user-slice";
 
 export default function SignIn() {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
 
   const {
     handleSubmit,
@@ -16,8 +16,7 @@ export default function SignIn() {
     formState: { errors },
   } = useForm<ILoginData>();
 
-  const [loginUser, { isLoading, isError, isSuccess, data }] =
-    useLoginUserMutation();
+  const [loginUser, { isLoading, isError, data }] = useLoginUserMutation();
 
   const onSubmit: SubmitHandler<ILoginData> = async (formData) => {
     const userData = {
@@ -27,12 +26,12 @@ export default function SignIn() {
     await loginUser(userData);
   };
 
-  if (isSuccess) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    dispatch(addUser(data));
-    console.log("User logged in successfully; data:", data);
+  if (data !== undefined) {
+    localStorage.setItem("token", data.user.token);
+    // dispatch(addUser(data));
     navigate("/");
+    navigate(0);
+    console.log("User logged in successfully; data:", data);
   }
 
   return (

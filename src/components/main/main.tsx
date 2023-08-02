@@ -6,6 +6,8 @@ import NotFound from "../not-found";
 import { useState } from "react";
 import SignUp from "../sign-up";
 import SignIn from "../sign-in";
+import UserProfile from "../user-profile";
+import NewArticle from "../new-article";
 
 const pageSize = 5;
 const pagesCount = 5;
@@ -41,6 +43,8 @@ export default function Main() {
           <Route path="/articles/:slug" element={<ArticleInside />} />
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/sign-up" element={<SignUp />} />
+          <Route path="/profile" element={<UserProfile />} />
+          <Route path="/new-article" element={<NewArticle />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
