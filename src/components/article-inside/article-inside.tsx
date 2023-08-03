@@ -27,7 +27,7 @@ export default function ArticleInside() {
     tagList,
     title,
     // updatedAt,
-  } = state;
+  } = state || {};
 
   const [slugState, setSlugState] = useState(slug || "");
   const [skip, setSkip] = useState(true);
@@ -86,8 +86,7 @@ export default function ArticleInside() {
         </div>
         <div className={styles.userInfoInsideContainer}>
           <UserInfo
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-            author={author || article.author.username}
+            author={author || article.author}
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             createdAt={createdAt || article.createdAt}
           />
