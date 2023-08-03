@@ -28,7 +28,7 @@ export default function Blog() {
       <Header />
       <Main />
       <Routes>
-        {/* {["/", "/articles"].map((path, i) => (
+        {["/", "/articles"].map((path, i) => (
           <Route
             key={i}
             path={path}
@@ -42,31 +42,7 @@ export default function Blog() {
               />
             }
           />
-        ))} */}
-        <Route
-          path="/articles"
-          element={
-            <ArticleList
-              currentPage={currentPage}
-              currentOffset={currentOffset}
-              handlePageChange={handlePageChange}
-              pageSize={pageSize}
-              pagesCount={pagesCount}
-            />
-          }
-        />
-        <Route
-          path="/"
-          element={
-            <ArticleList
-              currentPage={currentPage}
-              currentOffset={currentOffset}
-              handlePageChange={handlePageChange}
-              pageSize={pageSize}
-              pagesCount={pagesCount}
-            />
-          }
-        />
+        ))}
         <Route path="/articles/:slug" element={<ArticleInside />} />
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
