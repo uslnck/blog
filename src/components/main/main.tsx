@@ -45,7 +45,7 @@ export default function Main() {
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/profile" element={<UserProfile />} />
           <Route path="/new-article" element={<NewArticle />} />
-          <Route path="*" element={<NotFound />} />
+          {/* <Route path="*" element={<NotFound />} /> */}
         </Routes>
       </div>
     </main>
