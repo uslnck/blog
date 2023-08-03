@@ -2,7 +2,7 @@ import ArticleInside from "../article-inside";
 import ArticleList from "../article-list";
 import styles from "./main.module.less";
 import { Routes, Route } from "react-router-dom";
-import NotFound from "../not-found";
+// import NotFound from "../not-found";
 import { useState } from "react";
 import SignUp from "../sign-up";
 import SignIn from "../sign-in";
