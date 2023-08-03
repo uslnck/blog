@@ -2,7 +2,7 @@ import ArticleInside from "../article-inside";
 import ArticleList from "../article-list";
 import styles from "./main.module.less";
 import { Routes, Route } from "react-router-dom";
-// import NotFound from "../not-found";
+import NotFound from "../not-found";
 import { useState } from "react";
 import SignUp from "../sign-up";
 import SignIn from "../sign-in";
@@ -45,7 +45,7 @@ export default function Main() {
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/profile" element={<UserProfile />} />
           <Route path="/new-article" element={<NewArticle />} />
-          {/* <Route path="*" element={<NotFound />} /> */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
     </main>

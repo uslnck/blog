@@ -11,6 +11,7 @@ import {
   ISignResponse,
   IUpdateFormQueryData,
   INewArticle,
+  IArticleResponse,
 } from "../types";
 
 const staggeredBaseQueryWithBailOut = retry(
@@ -91,6 +92,14 @@ export const searchApi = createApi({
         body: { article: formData },
       }),
     }),
+    getArticle: build.query<IArticleResponse, string>({
+      query: (slug) => {
+        console.log("otrabotal zapros za statiei");
+        return {
+          url: `/articles/${slug}`,
+        };
+      },
+    }),
   }),
 });
 
@@ -101,4 +110,5 @@ export const {
   useGetUserQuery,
   useUpdateUserMutation,
   useCreateArticleMutation,
+  useGetArticleQuery,
 } = searchApi;
