@@ -9,19 +9,11 @@ export interface ILoginData {
   password: string;
 }
 
-export interface IFormData {
-  email: string;
-  password: string;
-  username: string;
-  repeatPassword: string | object;
-  personalData: boolean | object;
-}
-
 export interface IUpdateFormQueryData {
   formData: {
     email: string;
     bio?: string;
-    repeatPassword?: string ;
+    repeatPassword?: string;
     username: string;
     image: string;
   };
@@ -45,4 +37,29 @@ export interface ISignResponse {
     image: string;
     bio: string;
   };
+}
+
+export interface IFormData {
+  email: string;
+  password: string;
+  username: string;
+  repeatPassword?: string;
+  personalData?: boolean;
+}
+
+export interface INewArticle {
+  formData: {
+    title: string;
+    description: string;
+    body: string;
+    tags?: string[];
+  };
+  token: string;
+}
+
+export interface INewArticleForm {
+  title: string;
+  description: string;
+  body: string;
+  tags?: string[];
 }

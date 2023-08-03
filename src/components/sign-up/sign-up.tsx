@@ -26,8 +26,8 @@ export default function SignUp() {
       username: formData.username,
       email: formData.email,
       password: formData.password,
-      repeatPassword: {},
-      personalData: {},
+      // repeatPassword: "",
+      // personalData: false,
     };
     await createUser(userData);
   };

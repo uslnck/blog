@@ -10,6 +10,7 @@ import {
   IGetArticlesResponse,
   ISignResponse,
   IUpdateFormQueryData,
+  INewArticle,
 } from "../types";
 
 const staggeredBaseQueryWithBailOut = retry(
@@ -66,7 +67,7 @@ export const searchApi = createApi({
       }),
     }),
     updateUser: build.mutation<ISignResponse, IUpdateFormQueryData>({
-      query: ({ formData,  token }) => {
+      query: ({ formData, token }) => {
         console.log(formData, token);
         return {
           url: "/user",
@@ -79,6 +80,17 @@ export const searchApi = createApi({
         };
       },
     }),
+    createArticle: build.mutation<ISignResponse, INewArticle>({
+      query: ({ formData, token }) => ({
+        url: "/articles",
+        method: "POST",
+        headers: {
+          Authorization: `Token ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: { article: formData },
+      }),
+    }),
   }),
 });
 
@@ -88,4 +100,5 @@ export const {
   useLoginUserMutation,
   useGetUserQuery,
   useUpdateUserMutation,
+  useCreateArticleMutation,
 } = searchApi;
