@@ -15,7 +15,7 @@ import { Spin } from "antd";
 
 export default function ArticleInside() {
   const location = useLocation();
-  const state = location?.state as IArticle;
+  const state = location.state as IArticle;
 
   const {
     author,
@@ -33,12 +33,11 @@ export default function ArticleInside() {
   const [slugState, setSlugState] = useState(slug || "");
   const [skip, setSkip] = useState(true);
 
-  if (!state) setSlugState(getSlug() as string);
-
   useEffect(() => {
     if (!state) {
-      console.log("skip stal false v useeffecte");
+      setSlugState(getSlug() as string);
       setSkip(false);
+      console.log("skip stal false v useeffecte");
     }
   }, [state]);
 
@@ -46,7 +45,7 @@ export default function ArticleInside() {
     useGetArticleQuery(slugState, {
       skip,
     });
-  const { article } = articleObject;
+  const { article } = articleObject || "ne vitashil article";
 
   console.log(article);
 
