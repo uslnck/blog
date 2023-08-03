@@ -66,15 +66,16 @@ export const searchApi = createApi({
       }),
     }),
     updateUser: build.mutation<ISignResponse, IUpdateFormQueryData>({
-      query: ({ formData, token }) => {
+      query: ({ formData,  token }) => {
         console.log(formData, token);
         return {
           url: "/user",
           method: "PUT",
           headers: {
             Authorization: `Token ${token}`,
+            "Content-Type": "application/json",
           },
-          body: { formData },
+          body: formData,
         };
       },
     }),

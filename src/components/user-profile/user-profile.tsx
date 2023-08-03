@@ -10,12 +10,9 @@ export default function UserProfile() {
 
   const {
     handleSubmit,
-    watch,
     register,
     formState: { errors },
   } = useForm<IUpdateFormData>();
-
-  const watchPassword = watch("password", "");
 
   const [updateUser, { isLoading, isError, isSuccess, data }] =
     useUpdateUserMutation();
@@ -23,15 +20,38 @@ export default function UserProfile() {
   const token = localStorage.getItem("token") as string;
 
   const onSubmit: SubmitHandler<IUpdateFormData> = async (formData) => {
+    console.log(formData);
+
     const userNewData = {
-      // username: formData?.username,
-      // email: formData?.email,
-      // bio: {},
+      username: formData?.username,
+      email: formData?.email,
+      // bio: formData?.bio,
       image: formData?.image,
-      // repeatPassword: {},
     };
-    await updateUser({ formData: userNewData, token });
+    await updateUser({ formData: userNewData, token: token });
   };
+
+  // const kl = async () => {
+  //   try {
+  //     const response = await fetch("https://blog.kata.academy/api/user", {
+  //       method: "PUT",
+  //       headers: {
+  //         Authorization: `Token ${token}`,
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(formData),
+  //     });
+
+  //     console.log(response)
+
+  //     const data = await response.json();
+  //     console.log(data)
+  //     return data;
+  //   } catch (error) {
+  //     throw new Error('Request failed sdf' );
+  //   }
+  // }
+  // await kl()
 
   if (isSuccess) {
     console.log("PUT created; data:", data);
@@ -45,12 +65,8 @@ export default function UserProfile() {
       onSubmit={(e) => void handleSubmit(onSubmit)(e)}
     >
       <h2 className={styles.signUpHeader}>Edit Profile</h2>
-      {isError ? (
-        <p className={styles.validationError}>User already exists</p>
-      ) : (
-        false
-      )}
-      {/* <div className={styles.inputGroup}>
+      {isError ? <p className={styles.validationError}>Error</p> : false}
+      <div className={styles.inputGroup}>
         <label htmlFor="username">Username</label>
         <input
           id="username"
@@ -94,7 +110,7 @@ export default function UserProfile() {
         )}
       </div>
 
-      <div className={styles.inputGroup}>
+      {/* <div className={styles.inputGroup}>
         <label htmlFor="password">New password</label>
         <input
           id="password"
@@ -137,17 +153,7 @@ export default function UserProfile() {
 
       <div className={styles.inputGroup}>
         <label htmlFor="image">Avatar image (url)</label>
-        <input
-          id="image"
-          type="text"
-          {...register("image", {
-            required: "Password is required",
-            minLength: {
-              value: 6,
-              message: "Password must be at least 6 characters long",
-            },
-          })}
-        />
+        <input id="image" type="text" {...register("image")} />
       </div>
 
       {isLoading ? (

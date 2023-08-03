@@ -22,6 +22,7 @@ export default function Header() {
 
   const handleLogout = () => {
     localStorage.setItem("token", "");
+    navigate("/");
     navigate(0);
   };
 

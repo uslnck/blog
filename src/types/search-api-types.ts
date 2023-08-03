@@ -20,8 +20,8 @@ export interface IFormData {
 export interface IUpdateFormQueryData {
   formData: {
     email: string;
-    bio: string | object;
-    repeatPassword: string | object;
+    bio?: string;
+    repeatPassword?: string ;
     username: string;
     image: string;
   };
@@ -31,7 +31,7 @@ export interface IUpdateFormQueryData {
 export interface IUpdateFormData {
   email: string;
   password: string;
-  repeatPassword: string | object;
+  repeatPassword?: string;
   username: string;
   image: string;
   token: string;
