@@ -74,7 +74,7 @@ export default function ArticleInside() {
             </div>
           </div>
           <ul className={styles.tagInsideContainer}>
-            {(tagList || article.tagList).map((tag, i) => (
+            {[...(tagList || article.tagList)].map((tag, i) => (
               <li className={styles.tagInside} key={i}>
                 {tag}
               </li>
