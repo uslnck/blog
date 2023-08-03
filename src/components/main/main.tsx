@@ -1,13 +1,13 @@
-import ArticleInside from "../article-inside";
-import ArticleList from "../article-list";
+// import ArticleInside from "../article-inside";
+// import ArticleList from "../article-list";
 import styles from "./main.module.less";
-import { Routes, Route } from "react-router-dom";
-import NotFound from "../not-found";
-import { useState } from "react";
-import SignUp from "../sign-up";
-import SignIn from "../sign-in";
-import UserProfile from "../user-profile";
-import NewArticle from "../new-article";
+// import { Routes, Route } from "react-router-dom";
+// import NotFound from "../not-found";
+// import { useState } from "react";
+// import SignUp from "../sign-up";
+// import SignIn from "../sign-in";
+// import UserProfile from "../user-profile";
+// import NewArticle from "../new-article";
 
 // const pageSize = 5;
 // const pagesCount = 5;
