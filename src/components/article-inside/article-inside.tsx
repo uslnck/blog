@@ -1,12 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-nocheck
-
 import styles from "./article-inside.module.less";
 import UserInfo from "../user-info";
 import { useLocation } from "react-router-dom";
-import { IArticle } from "../../types";
-// import NotFound from "../not-found";
+import { IArticle, IArticleResponse } from "../../types";
 import Markdown from "markdown-to-jsx";
 import { useGetArticleQuery } from "../../store";
 import { getSlug } from "./utils";
@@ -22,12 +17,10 @@ export default function ArticleInside() {
     body,
     createdAt,
     description,
-    // favorited,
     favoritesCount,
     slug,
     tagList,
     title,
-    // updatedAt,
   } = state || {};
 
   const [slugState, setSlugState] = useState(slug || "");
@@ -37,7 +30,6 @@ export default function ArticleInside() {
     if (!state) {
       setSlugState(getSlug() as string);
       setSkip(false);
-      console.log("skip stal false v useeffecte");
     }
   }, [state]);
 
@@ -45,14 +37,11 @@ export default function ArticleInside() {
     useGetArticleQuery(slugState, {
       skip,
     });
-  const { article } = articleObject || "ne vitashil article";
+  const { article } = articleObject as IArticleResponse;
 
-  console.log(article);
-
-  // const { slug } = useParams();
-  // const article = articles.find((article) => article.slug === slug);
-  // if (!slug) return <NotFound />;
-  // const { body, favoritesCount } = article;
+  const articleAuthor = article?.author || author;
+  const articleCreatedAt = article?.createdAt || createdAt;
+  const articleLikesCount = article?.favoritesCount ?? favoritesCount;
 
   return isFetching ? (
     <Spin size="large" />
@@ -62,39 +51,37 @@ export default function ArticleInside() {
         <div className={styles.textInsideContainer}>
           <div className={styles.articleInsideTitleLikesContainer}>
             <h5 className={styles.articleInsideTitle}>
-              {title || article.title}
+              {title || article?.title}
             </h5>
             <div className={styles.articleInsideLikesContainer}>
               <button className={styles.likeInsideButton}>
                 <img src="../../heart.svg" alt="heart" />
               </button>
               <span className={styles.likeInsideCount}>
-                {favoritesCount || article.favoritesCount}
+                {articleLikesCount}
               </span>
             </div>
           </div>
           <ul className={styles.tagInsideContainer}>
-            {(tagList || []).concat(article.tagList || []).map((tag, i) => (
+            {(tagList || []).concat(article?.tagList || []).map((tag, i) => (
               <li className={styles.tagInside} key={i}>
                 {tag}
               </li>
             ))}
           </ul>
           <p className={styles.articleInsideText}>
-            {description || article.description}
+            {description || article?.description}
           </p>
         </div>
         <div className={styles.userInfoInsideContainer}>
-          <UserInfo
-            author={author || article.author}
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            createdAt={createdAt || article.createdAt}
-          />
+          {articleAuthor && (
+            <UserInfo author={articleAuthor} createdAt={articleCreatedAt} />
+          )}
         </div>
       </div>
       <div className={styles.descriptionInsideText}>
         <Markdown>
-          {body || article.body || "No article text provided!"}
+          {body || article?.body || "No article text provided!"}
         </Markdown>
       </div>
     </div>
