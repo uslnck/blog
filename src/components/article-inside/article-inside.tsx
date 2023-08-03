@@ -86,7 +86,8 @@ export default function ArticleInside() {
         </div>
         <div className={styles.userInfoInsideContainer}>
           <UserInfo
-            author={author || article.author}
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+            author={author || article.author.username}
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             createdAt={createdAt || article.createdAt}
           />
