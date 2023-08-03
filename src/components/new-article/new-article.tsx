@@ -57,8 +57,8 @@ export default function NewArticle() {
                 message: "Title must be at least 1 character long",
               },
               maxLength: {
-                value: 40,
-                message: "Title cannot exceed 40 characters",
+                value: 50,
+                message: "Title cannot exceed 50 characters",
               },
             })}
           />
@@ -95,10 +95,12 @@ export default function NewArticle() {
 
         <div className={styles.inputGroup}>
           <label htmlFor="body">Text</label>
-          <input
+          <textarea
             id="body"
-            type="text"
-            className={errors.body ? styles.inputErrorBorder : ""}
+            rows={15}
+            className={`${styles.textArea} ${
+              errors.body ? styles.inputErrorBorder : ""
+            }`}
             {...register("body", {
               required: "Text is required",
               minLength: {
