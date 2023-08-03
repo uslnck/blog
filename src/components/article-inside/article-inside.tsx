@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-nocheck
 
@@ -74,7 +75,7 @@ export default function ArticleInside() {
             </div>
           </div>
           <ul className={styles.tagInsideContainer}>
-            {[...(tagList || article.tagList)].map((tag, i) => (
+            {(tagList || []).concat(article.tagList || []).map((tag, i) => (
               <li className={styles.tagInside} key={i}>
                 {tag}
               </li>
