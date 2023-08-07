@@ -3,7 +3,11 @@ import UserInfo from "../user-info";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { IArticle, IArticleResponse } from "../../types";
 import Markdown from "markdown-to-jsx";
-import { useDeleteArticleMutation, useGetArticleQuery } from "../../store";
+import {
+  useDeleteArticleMutation,
+  useGetArticleQuery,
+  useLikeArticleMutation,
+} from "../../store";
 import { getSlug } from "./utils";
 import { useEffect, useState } from "react";
 import { Spin } from "antd";
@@ -51,6 +55,7 @@ export default function ArticleInside() {
   };
 
   const [deleteArticle /*, {}*/] = useDeleteArticleMutation();
+  const [likeArticle] = useLikeArticleMutation();
 
   const handleDeleteArticle = async () => {
     if (window.confirm("Are you sure you want to delete this article?")) {
@@ -61,6 +66,13 @@ export default function ArticleInside() {
       navigate("/");
       navigate(0);
     }
+  };
+
+  const handleLike = async () => {
+    await likeArticle({
+      slug: slug || article.slug,
+      token: localStorage.getItem("token") as string,
+    });
   };
 
   return isFetching ? (
@@ -74,7 +86,10 @@ export default function ArticleInside() {
               {title || article?.title}
             </h5>
             <div className={styles.articleInsideLikesContainer}>
-              <button className={styles.likeInsideButton}>
+              <button
+                className={styles.likeInsideButton}
+                onClick={() => void handleLike()}
+              >
                 <img src="../../heart.svg" alt="heart" />
               </button>
               <span className={styles.likeInsideCount}>

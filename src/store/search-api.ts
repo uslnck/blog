@@ -123,6 +123,15 @@ export const searchApi = createApi({
         },
       }),
     }),
+    likeArticle: build.mutation<IDeleteArticleResponse, IDeleteArticleData>({
+      query: ({ slug, token }) => ({
+        url: `/articles/${slug}/favorite`,
+        method: "POST",
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      }),
+    }),
   }),
 });
 
@@ -136,4 +145,5 @@ export const {
   useGetArticleQuery,
   useEditArticleMutation,
   useDeleteArticleMutation,
+  useLikeArticleMutation,
 } = searchApi;
