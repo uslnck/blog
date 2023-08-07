@@ -12,6 +12,9 @@ import {
   IUpdateFormQueryData,
   INewArticle,
   IArticleResponse,
+  IDeleteArticleResponse,
+  IDeleteArticleData,
+  IEditArticleData,
 } from "../types";
 
 const staggeredBaseQueryWithBailOut = retry(
@@ -94,11 +97,31 @@ export const searchApi = createApi({
     }),
     getArticle: build.query<IArticleResponse, string>({
       query: (slug) => {
-        console.log("otrabotal zapros za statiei");
+        console.log("Got article from server");
         return {
           url: `/articles/${slug}`,
         };
       },
+    }),
+    editArticle: build.mutation<IArticleResponse, IEditArticleData>({
+      query: ({ formData, token, slug }) => ({
+        url: `/articles/${slug}`,
+        method: "PUT",
+        headers: {
+          Authorization: `Token ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: { article: formData },
+      }),
+    }),
+    deleteArticle: build.mutation<IDeleteArticleResponse, IDeleteArticleData>({
+      query: ({ slug, token }) => ({
+        url: `/articles/${slug}`,
+        method: "DELETE",
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      }),
     }),
   }),
 });
@@ -111,4 +134,6 @@ export const {
   useUpdateUserMutation,
   useCreateArticleMutation,
   useGetArticleQuery,
+  useEditArticleMutation,
+  useDeleteArticleMutation,
 } = searchApi;

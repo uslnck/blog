@@ -1,8 +1,10 @@
-import { useLocation, useNavigate } from "react-router-dom";
-import styles from "./new-article.module.less";
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
+import { useNavigate } from "react-router-dom";
+import styles from "./edit-article.module.less";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { IEditArticleState, INewArticleForm } from "../../types";
-import { useCreateArticleMutation, useEditArticleMutation } from "../../store";
+import { INewArticleForm } from "../../types";
+import { useCreateArticleMutation } from "../../store";
 import { useState } from "react";
 
 let tagStart = 10;
@@ -10,10 +12,6 @@ let tagStart = 10;
 export default function NewArticle() {
   const [tags, setTags] = useState([{ id: 1 }]);
   const navigate = useNavigate();
-  const location = useLocation();
-  const state = location.state as IEditArticleState;
-
-  const { body, description, title, slug } = state || {};
 
   const {
     handleSubmit,
@@ -21,9 +19,8 @@ export default function NewArticle() {
     formState: { errors },
   } = useForm<INewArticleForm>();
 
-  const [createArticle, { isSuccess: isCreateSuccess }] =
+  const [createArticle, { isError, isSuccess, data }] =
     useCreateArticleMutation();
-  const [editArticle, { isSuccess: isEditSuccess }] = useEditArticleMutation();
 
   const token = localStorage.getItem("token") as string;
 
@@ -40,13 +37,11 @@ export default function NewArticle() {
       body: formData.body,
       tagList: tagValues,
     };
-
-    await (state
-      ? editArticle({ formData: articleData, token: token, slug: slug })
-      : createArticle({ formData: articleData, token: token }));
+    await createArticle({ formData: articleData, token: token });
   };
 
-  if (isCreateSuccess || isEditSuccess) {
+  if (isSuccess) {
+    console.log("Article created; data:", data);
     navigate("/");
     navigate(0);
   }
@@ -64,22 +59,18 @@ export default function NewArticle() {
 
   return (
     <div className={styles.createArticleContainer}>
-      {state ? (
-        <h2 className={styles.createArticleHeader}>Edit article</h2>
-      ) : (
-        <h2 className={styles.createArticleHeader}>Create new article</h2>
-      )}
+      <h2 className={styles.createArticleHeader}>Create new article</h2>
       <form
         className={styles.createArticleForm}
         onSubmit={(e) => void handleSubmit(onSubmit)(e)}
       >
+        {isError ? <p className={styles.validationError}>Error</p> : false}
         <div className={styles.inputGroup}>
           <label htmlFor="title">Title</label>
           <input
             id="title"
             type="text"
             autoComplete="on"
-            defaultValue={title || ""}
             className={errors.title ? styles.inputErrorBorder : ""}
             {...register("title", {
               required: "Title is required",
@@ -104,7 +95,6 @@ export default function NewArticle() {
             id="description"
             type="text"
             autoComplete="on"
-            defaultValue={description || ""}
             className={errors.description ? styles.inputErrorBorder : ""}
             {...register("description", {
               required: "Description is required",
@@ -133,7 +123,6 @@ export default function NewArticle() {
             className={`${styles.textArea} ${
               errors.body ? styles.inputErrorBorder : ""
             }`}
-            defaultValue={body || ""}
             {...register("body", {
               required: "Text is required",
               minLength: {
@@ -167,9 +156,9 @@ export default function NewArticle() {
                       : ""
                   }
                   {...register(`tag-${tag.id}` as keyof INewArticleForm, {
-                    pattern: {
-                      value: /^[a-z]{2,}$/,
-                      message: "At least 2 symbols required (no whitespaces)",
+                    minLength: {
+                      value: 2,
+                      message: "At least 2 symbols required",
                     },
                   })}
                 />
@@ -207,15 +196,9 @@ export default function NewArticle() {
             </button>
           )}
         </div>
-        {state ? (
-          <button type="submit" className={styles.createButton}>
-            Update
-          </button>
-        ) : (
-          <button type="submit" className={styles.createButton}>
-            Create
-          </button>
-        )}
+        <button type="submit" className={styles.createButton}>
+          Create
+        </button>
       </form>
     </div>
   );

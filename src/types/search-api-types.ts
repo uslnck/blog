@@ -83,3 +83,24 @@ export interface IArticleResponse {
     };
   };
 }
+
+export interface IEditArticleData {
+  formData: {
+    title: string;
+    description: string;
+    body: string;
+  };
+  token: string;
+  slug: string;
+}
+
+export interface IDeleteArticleResponse {
+  errors: {
+    body: string[];
+  };
+}
+
+export interface IDeleteArticleData {
+  slug: string;
+  token: string;
+}

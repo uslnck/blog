@@ -14,14 +14,12 @@ export default function UserProfile() {
     formState: { errors },
   } = useForm<IUpdateFormData>();
 
-  const [updateUser, { isLoading, isError, isSuccess, data }] =
+  const [updateUser, { isLoading, isError, isSuccess }] =
     useUpdateUserMutation();
 
   const token = localStorage.getItem("token") as string;
 
   const onSubmit: SubmitHandler<IUpdateFormData> = async (formData) => {
-    console.log(formData);
-
     const userNewData = {
       username: formData?.username,
       email: formData?.email,
@@ -31,7 +29,7 @@ export default function UserProfile() {
     await updateUser({ formData: userNewData, token: token });
   };
 
-  // const kl = async () => {
+  // const fetch = async () => {
   //   try {
   //     const response = await fetch("https://blog.kata.academy/api/user", {
   //       method: "PUT",
@@ -41,9 +39,7 @@ export default function UserProfile() {
   //       },
   //       body: JSON.stringify(formData),
   //     });
-
   //     console.log(response)
-
   //     const data = await response.json();
   //     console.log(data)
   //     return data;
@@ -51,10 +47,9 @@ export default function UserProfile() {
   //     throw new Error('Request failed sdf' );
   //   }
   // }
-  // await kl()
+  // await fetch()
 
   if (isSuccess) {
-    console.log("PUT created; data:", data);
     navigate("/");
     navigate(0);
   }
@@ -109,47 +104,6 @@ export default function UserProfile() {
           <p className={styles.validationError}>{errors?.email.message}</p>
         )}
       </div>
-
-      {/* <div className={styles.inputGroup}>
-        <label htmlFor="password">New password</label>
-        <input
-          id="password"
-          type="password"
-          className={errors.password ? styles.inputErrorBorder : ""}
-          {...register("password", {
-            required: "Password is required",
-            minLength: {
-              value: 6,
-              message: "Password must be at least 6 characters long",
-            },
-            maxLength: {
-              value: 40,
-              message: "Password cannot exceed 40 characters",
-            },
-          })}
-        />
-        {errors.password && (
-          <p className={styles.validationError}>{errors?.password.message}</p>
-        )}
-      </div>
-
-      <div className={styles.inputGroup}>
-        <label htmlFor="repeatPassword">Repeat new password</label>
-        <input
-          id="repeatPassword"
-          type="password"
-          className={errors.repeatPassword ? styles.inputErrorBorder : ""}
-          {...register("repeatPassword", {
-            validate: (value) =>
-              value === watchPassword || "Passwords do not match",
-          })}
-        />
-        {errors.repeatPassword && (
-          <p className={styles.validationError}>
-            {errors?.repeatPassword.message}
-          </p>
-        )}
-      </div> */}
 
       <div className={styles.inputGroup}>
         <label htmlFor="image">Avatar image (url)</label>

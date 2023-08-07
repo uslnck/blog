@@ -1,14 +1,15 @@
 import styles from "./article-inside.module.less";
 import UserInfo from "../user-info";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { IArticle, IArticleResponse } from "../../types";
 import Markdown from "markdown-to-jsx";
-import { useGetArticleQuery } from "../../store";
+import { useDeleteArticleMutation, useGetArticleQuery } from "../../store";
 import { getSlug } from "./utils";
 import { useEffect, useState } from "react";
 import { Spin } from "antd";
 
 export default function ArticleInside() {
+  const navigate = useNavigate();
   const location = useLocation();
   const state = location.state as IArticle;
 
@@ -39,9 +40,28 @@ export default function ArticleInside() {
     });
   const { article } = articleObject as IArticleResponse;
 
-  const articleAuthor = article?.author || author;
-  const articleCreatedAt = article?.createdAt || createdAt;
-  const articleLikesCount = article?.favoritesCount ?? favoritesCount;
+  const articleAuthor = author || article?.author;
+  const articleCreatedAt = createdAt || article?.createdAt;
+  const articleLikesCount = favoritesCount ?? article?.favoritesCount;
+  const articleContent = {
+    title: title || article?.title,
+    description: description || article?.description,
+    body: body || article?.body,
+    slug: slug || article?.slug,
+  };
+
+  const [deleteArticle /*, {}*/] = useDeleteArticleMutation();
+
+  const handleDeleteArticle = async () => {
+    if (window.confirm("Are you sure you want to delete this article?")) {
+      await deleteArticle({
+        slug: slug || article.slug,
+        token: localStorage.getItem("token") as string,
+      });
+      navigate("/");
+      navigate(0);
+    }
+  };
 
   return isFetching ? (
     <Spin size="large" />
@@ -73,10 +93,30 @@ export default function ArticleInside() {
             {description || article?.description}
           </p>
         </div>
-        <div className={styles.userInfoInsideContainer}>
+        <div className={styles.userInfoButtonsContainer}>
           {articleAuthor && (
-            <UserInfo author={articleAuthor} createdAt={articleCreatedAt} />
+            <div className={styles.userInfoInsideContainer}>
+              <UserInfo author={articleAuthor} createdAt={articleCreatedAt} />
+            </div>
           )}
+          {articleAuthor &&
+          articleAuthor.username === localStorage.getItem("username") ? (
+            <div className={styles.editDeleteContainer}>
+              <button
+                className={styles.deleteArticle}
+                onClick={() => void handleDeleteArticle()}
+              >
+                Delete
+              </button>
+              <Link
+                to={`/new-article`}
+                className={styles.editArticle}
+                state={articleContent}
+              >
+                Edit
+              </Link>
+            </div>
+          ) : null}
         </div>
       </div>
       <div className={styles.descriptionInsideText}>

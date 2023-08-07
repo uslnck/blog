@@ -28,6 +28,7 @@ export default function SignIn() {
 
   if (data !== undefined) {
     localStorage.setItem("token", data.user.token);
+    localStorage.setItem("username", data.user.username);
     // dispatch(addUser(data));
     navigate("/");
     navigate(0);

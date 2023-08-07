@@ -33,3 +33,10 @@ export interface IUserInfo {
   };
   createdAt: string;
 }
+
+export interface IEditArticleState {
+  title: string;
+  description: string;
+  body: string;
+  slug: string;
+}
