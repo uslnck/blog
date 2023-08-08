@@ -44,6 +44,7 @@ const staggeredBaseQueryWithBailOut = retry(
 export const searchApi = createApi({
   reducerPath: "searchApi",
   baseQuery: staggeredBaseQueryWithBailOut,
+  tagTypes: ["Likes"],
   endpoints: (build) => ({
     getArticles: build.query<IGetArticlesResponse, number>({
       query: (offset) => `/articles?limit=5&offset=${offset}`,
@@ -97,11 +98,12 @@ export const searchApi = createApi({
     }),
     getArticle: build.query<IArticleResponse, string>({
       query: (slug) => {
-        console.log("Got article from server");
+        console.log("Requested article from server");
         return {
           url: `/articles/${slug}`,
         };
       },
+      // providesTags: ["Likes"],
     }),
     editArticle: build.mutation<IArticleResponse, IEditArticleData>({
       query: ({ formData, token, slug }) => ({
@@ -132,6 +134,15 @@ export const searchApi = createApi({
         },
       }),
     }),
+    unlikeArticle: build.mutation<IDeleteArticleResponse, IDeleteArticleData>({
+      query: ({ slug, token }) => ({
+        url: `/articles/${slug}/favorite`,
+        method: "DELETE",
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      }),
+    }),
   }),
 });
 
@@ -146,4 +157,5 @@ export const {
   useEditArticleMutation,
   useDeleteArticleMutation,
   useLikeArticleMutation,
+  useUnlikeArticleMutation,
 } = searchApi;

@@ -7,6 +7,7 @@ import {
   useDeleteArticleMutation,
   useGetArticleQuery,
   useLikeArticleMutation,
+  useUnlikeArticleMutation,
 } from "../../store";
 import { getSlug } from "./utils";
 import { useEffect, useState } from "react";
@@ -26,36 +27,45 @@ export default function ArticleInside() {
     slug,
     tagList,
     title,
+    favorited,
   } = state || {};
 
-  const [slugState, setSlugState] = useState(slug || "");
+  const [slugInState, setSlugInState] = useState(slug || "");
   const [skip, setSkip] = useState(true);
 
   useEffect(() => {
     if (!state) {
-      setSlugState(getSlug() as string);
+      setSlugInState(getSlug() as string);
       setSkip(false);
     }
   }, [state]);
 
   const { data: articleObject = { article: {} }, isFetching } =
-    useGetArticleQuery(slugState, {
+    useGetArticleQuery(slugInState, {
       skip,
     });
   const { article } = articleObject as IArticleResponse;
 
+  const [articleLikesCount, setArticleLikesCount] = useState(
+    favoritesCount ?? article?.favoritesCount
+  );
+
   const articleAuthor = author || article?.author;
   const articleCreatedAt = createdAt || article?.createdAt;
-  const articleLikesCount = favoritesCount ?? article?.favoritesCount;
   const articleContent = {
     title: title || article?.title,
     description: description || article?.description,
     body: body || article?.body,
     slug: slug || article?.slug,
   };
+  const articleFavorited = favorited ?? article?.favorited;
 
   const [deleteArticle /*, {}*/] = useDeleteArticleMutation();
-  const [likeArticle] = useLikeArticleMutation();
+
+  const [hasLiked, setHasLiked] = useState(false);
+  const [likeArticle, { isLoading: likeLoading }] = useLikeArticleMutation();
+  const [unlikeArticle, { isLoading: unlikeLoading }] =
+    useUnlikeArticleMutation();
 
   const handleDeleteArticle = async () => {
     if (window.confirm("Are you sure you want to delete this article?")) {
@@ -68,12 +78,29 @@ export default function ArticleInside() {
     }
   };
 
+  useEffect(() => {
+    setHasLiked(articleFavorited);
+  }, [articleFavorited]);
+
   const handleLike = async () => {
-    await likeArticle({
-      slug: slug || article.slug,
-      token: localStorage.getItem("token") as string,
-    });
+    if (hasLiked) {
+      setHasLiked(false);
+      setArticleLikesCount((prev) => prev - 1);
+      await unlikeArticle({
+        slug: slug || article.slug,
+        token: localStorage.getItem("token") as string,
+      });
+    } else {
+      setHasLiked(true);
+      setArticleLikesCount((prev) => prev + 1);
+      await likeArticle({
+        slug: slug || article.slug,
+        token: localStorage.getItem("token") as string,
+      });
+    }
   };
+
+  console.log("hasLiked:", hasLiked, "articleFavorited:", articleFavorited);
 
   return isFetching ? (
     <Spin size="large" />
@@ -87,10 +114,22 @@ export default function ArticleInside() {
             </h5>
             <div className={styles.articleInsideLikesContainer}>
               <button
-                className={styles.likeInsideButton}
                 onClick={() => void handleLike()}
+                className={`${styles.likeInsideButton} ${
+                  hasLiked ? styles.likedButton : ""
+                }`}
+                disabled={
+                  !localStorage.getItem("token") || likeLoading || unlikeLoading
+                }
               >
-                <img src="../../heart.svg" alt="heart" />
+                <img
+                  src={
+                    articleFavorited
+                      ? `${"../../liked.svg"}`
+                      : `${"../../heart.svg"}`
+                  }
+                  alt="heart"
+                />
               </button>
               <span className={styles.likeInsideCount}>
                 {articleLikesCount}

@@ -38,9 +38,14 @@ export default function Article({
             {title}
           </Link>
           <div className={styles.articleLikesContainer}>
-            <button className={styles.likeButton}>
-              <img src="../../heart.svg" alt="heart" />
-            </button>
+            <div className={styles.likeButton}>
+              <img
+                src={
+                  favorited ? `${"../../liked.svg"}` : `${"../../heart.svg"}`
+                }
+                alt="heart"
+              />
+            </div>
             <span className={styles.likeCount}>{favoritesCount}</span>
           </div>
         </div>
