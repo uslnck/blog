@@ -1,20 +1,14 @@
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./sign-in.module.less";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler } from "react-hook-form";
 import { ILoginData } from "../../types";
-import { /*useAppDispatch*/ useLoginUserMutation } from "../../store";
+import { useLoginUserMutation } from "../../store";
 import { Spin } from "antd";
-// import { addUser } from "../../store/user-slice";
+import DynamicForm from "../form";
+import { inputsProperties } from "./mock";
 
 export default function SignIn() {
   const navigate = useNavigate();
-  // const dispatch = useAppDispatch();
-
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-  } = useForm<ILoginData>();
 
   const [loginUser, { isLoading, isError, data }] = useLoginUserMutation();
 
@@ -29,68 +23,25 @@ export default function SignIn() {
   if (data !== undefined) {
     localStorage.setItem("token", data.user.token);
     localStorage.setItem("username", data.user.username);
-    // dispatch(addUser(data));
     navigate("/");
     navigate(0);
-    console.log("User logged in successfully; data:", data);
   }
 
   return (
-    <form
-      className={styles.signUpContainer}
-      onSubmit={(e) => void handleSubmit(onSubmit)(e)}
-    >
-      <h2 className={styles.signUpHeader}>Sign In</h2>
-      {isError ? (
-        <p className={styles.validationError}>Wrong email or password</p>
-      ) : (
-        false
-      )}
-      <div className={styles.inputGroup}>
-        <label htmlFor="email">Email</label>
-        <input
-          autoComplete="on"
-          id="email"
-          type="text"
-          className={errors.email ? styles.inputErrorBorder : ""}
-          {...register("email", {
-            required: "Email is required",
-            pattern: {
-              value: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i,
-              message: "Invalid email address",
-            },
-          })}
-        />
-        {errors.email && (
-          <p className={styles.validationError}>{errors?.email.message}</p>
-        )}
-      </div>
-
-      <div className={styles.inputGroup}>
-        <label htmlFor="password">Password</label>
-        <input
-          id="password"
-          type="password"
-          className={errors.password ? styles.inputErrorBorder : ""}
-          {...register("password", {
-            required: "Password is required",
-          })}
-        />
-        {errors.password && (
-          <p className={styles.validationError}>{errors?.password.message}</p>
-        )}
-      </div>
-
-      {isLoading ? (
-        <Spin size="large" />
-      ) : (
-        <button type="submit" className={styles.createButton}>
-          Login
-        </button>
-      )}
+    <>
+      <DynamicForm
+        inputsProperties={inputsProperties}
+        onSubmit={onSubmit}
+        formHeader="Sign In"
+        loader={isLoading}
+        loaderElement={<Spin />}
+        error={isError}
+        submitErrorText="Wrong email or password"
+        submitButtonText="Login"
+      />
       <p className={styles.haveAccountParagraph}>
         Don't have an account? <Link to="/sign-up">Sign Up</Link>
       </p>
-    </form>
+    </>
   );
 }

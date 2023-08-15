@@ -5,28 +5,24 @@ export interface IGetArticlesResponse {
 }
 
 export interface ILoginData {
-  email: string;
-  password: string;
+  email?: string;
+  password?: string;
 }
 
 export interface IUpdateFormQueryData {
   formData: {
-    email: string;
-    bio?: string;
-    repeatPassword?: string;
-    username: string;
-    image: string;
+    email?: string;
+    user?: string;
+    image?: string;
   };
   token: string;
 }
 
 export interface IUpdateFormData {
-  email: string;
-  password: string;
-  repeatPassword?: string;
-  username: string;
-  image: string;
-  token: string;
+  email?: string;
+  user?: string;
+  image?: string;
+  token?: string;
 }
 
 export interface ISignResponse {
@@ -40,11 +36,9 @@ export interface ISignResponse {
 }
 
 export interface IFormData {
-  email: string;
-  password: string;
-  username: string;
-  repeatPassword?: string;
-  personalData?: boolean;
+  email?: string;
+  password?: string;
+  username?: string;
 }
 
 export interface INewArticle {
