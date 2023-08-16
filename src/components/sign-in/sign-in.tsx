@@ -34,10 +34,11 @@ export default function SignIn() {
         onSubmit={onSubmit}
         formHeader="Sign In"
         loader={isLoading}
-        loaderElement={<Spin />}
+        loaderElement={<Spin size="large" />}
         error={isError}
         submitErrorText="Wrong email or password"
         submitButtonText="Login"
+        formStyle="user"
       />
       <p className={styles.haveAccountParagraph}>
         Don't have an account? <Link to="/sign-up">Sign Up</Link>

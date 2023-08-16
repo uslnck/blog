@@ -8,6 +8,7 @@ export const inputsProperties = [
     rhfRequiredMessage: "Email is required",
     rhfPatternValue: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i,
     rhfPatternMessage: "Invalid email address",
+    inputStyle: "user",
   },
   {
     labelContent: "Password",
@@ -15,5 +16,6 @@ export const inputsProperties = [
     id: "password",
     type: "password",
     rhfRequiredMessage: "Password is required",
+    inputStyle: "user",
   },
 ];

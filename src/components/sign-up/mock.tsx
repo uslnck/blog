@@ -10,6 +10,7 @@ export const inputsProperties = [
     rhfMinLengthValue: 3,
     rhfMaxLengthMessage: "Username cannot exceed 20 characters",
     rhfMaxLengthValue: 20,
+    inputStyle: "user",
   },
   {
     labelContent: "Email",
@@ -20,6 +21,7 @@ export const inputsProperties = [
     rhfRequiredMessage: "Email is required",
     rhfPatternValue: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i,
     rhfPatternMessage: "Invalid email address",
+    inputStyle: "user",
   },
   {
     labelContent: "Password",
@@ -31,6 +33,7 @@ export const inputsProperties = [
     rhfMinLengthValue: 6,
     rhfMaxLengthMessage: "Password cannot exceed 40 characters",
     rhfMaxLengthValue: 40,
+    inputStyle: "user",
   },
   {
     labelContent: "Repeat Password",
@@ -39,6 +42,7 @@ export const inputsProperties = [
     type: "password",
     rhfRequiredMessage: "Repeat password is required",
     validateWith: "password",
+    inputStyle: "user",
   },
   {
     labelContent: "I agree to the processing of my personal information",
@@ -46,5 +50,6 @@ export const inputsProperties = [
     id: "personalData",
     type: "checkbox",
     rhfRequiredMessage: "Consent to personal data processing is required",
+    inputStyle: "checkbox",
   },
 ];

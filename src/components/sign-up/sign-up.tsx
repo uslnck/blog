@@ -35,10 +35,11 @@ export default function SignUp() {
         onSubmit={onSubmit}
         formHeader="Create new account"
         loader={isLoading}
-        loaderElement={<Spin />}
+        loaderElement={<Spin size="large" />}
         error={isError}
         submitErrorText="User already exists"
         submitButtonText="Create"
+        formStyle="user"
       />
       <p className={styles.haveAccountParagraph}>
         Already have an account? <Link to="/sign-in">Sign In</Link>

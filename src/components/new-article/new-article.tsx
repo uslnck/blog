@@ -1,38 +1,45 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import styles from "./new-article.module.less";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { IEditArticleState, INewArticleForm } from "../../types";
 import { useCreateArticleMutation, useEditArticleMutation } from "../../store";
 import { useState } from "react";
+import { addDefaultValues, getTagValues } from "./utils";
+import DynamicForm from "../form";
+import { inputsProperties } from "./mock";
+import { Spin } from "antd";
+import styles from "./new-article.module.less";
 
 let tagStart = 10;
 
 export default function NewArticle() {
   const [tags, setTags] = useState([{ id: 1 }]);
   const navigate = useNavigate();
+
   const location = useLocation();
   const state = location.state as IEditArticleState;
-
   const { body, description, title, slug } = state || {};
 
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-  } = useForm<INewArticleForm>();
-
-  const [createArticle, { isSuccess: isCreateSuccess }] =
-    useCreateArticleMutation();
-  const [editArticle, { isSuccess: isEditSuccess }] = useEditArticleMutation();
+  const [
+    createArticle,
+    {
+      isError: isCreateError,
+      isLoading: isCreateLoading,
+      isSuccess: isCreateSuccess,
+    },
+  ] = useCreateArticleMutation();
+  const [
+    editArticle,
+    {
+      isError: isEditError,
+      isLoading: isEditLoading,
+      isSuccess: isEditSuccess,
+    },
+  ] = useEditArticleMutation();
 
   const token = localStorage.getItem("token") as string;
 
   const onSubmit: SubmitHandler<INewArticleForm> = async (formData) => {
-    const tagValues = tags
-      .map((tag) => formData[`tag-${tag.id}` as keyof INewArticleForm])
-      .filter(
-        (tagValue) => typeof tagValue === "string" && tagValue.trim() !== ""
-      );
+    const tagValues = getTagValues(tags, formData);
 
     const articleData = {
       title: formData.title,
@@ -62,97 +69,27 @@ export default function NewArticle() {
     setTags(updatedTags);
   };
 
+  const {
+    register,
+    formState: { errors },
+  } = useForm<INewArticleForm>();
+
   return (
-    <div className={styles.createArticleContainer}>
-      {state ? (
-        <h2 className={styles.createArticleHeader}>Edit article</h2>
-      ) : (
-        <h2 className={styles.createArticleHeader}>Create new article</h2>
-      )}
-      <form
-        className={styles.createArticleForm}
-        onSubmit={(e) => void handleSubmit(onSubmit)(e)}
-      >
-        <div className={styles.inputGroup}>
-          <label htmlFor="title">Title</label>
-          <input
-            id="title"
-            type="text"
-            autoComplete="on"
-            defaultValue={title || ""}
-            className={errors.title ? styles.inputErrorBorder : ""}
-            {...register("title", {
-              required: "Title is required",
-              minLength: {
-                value: 1,
-                message: "Title must be at least 1 character long",
-              },
-              maxLength: {
-                value: 50,
-                message: "Title cannot exceed 50 characters",
-              },
-            })}
-          />
-          {errors.title && (
-            <p className={styles.validationError}>{errors?.title.message}</p>
-          )}
-        </div>
-
-        <div className={styles.inputGroup}>
-          <label htmlFor="description">Short description</label>
-          <input
-            id="description"
-            type="text"
-            autoComplete="on"
-            defaultValue={description || ""}
-            className={errors.description ? styles.inputErrorBorder : ""}
-            {...register("description", {
-              required: "Description is required",
-              minLength: {
-                value: 1,
-                message: "Description must be at least 1 character long",
-              },
-              maxLength: {
-                value: 100,
-                message: "Description cannot exceed 100 characters",
-              },
-            })}
-          />
-          {errors.description && (
-            <p className={styles.validationError}>
-              {errors?.description.message}
-            </p>
-          )}
-        </div>
-
-        <div className={styles.inputGroup}>
-          <label htmlFor="body">Text</label>
-          <textarea
-            id="body"
-            rows={15}
-            className={`${styles.textArea} ${
-              errors.body ? styles.inputErrorBorder : ""
-            }`}
-            defaultValue={body || ""}
-            {...register("body", {
-              required: "Text is required",
-              minLength: {
-                value: 6,
-                message: "Text must be at least 6 characters long",
-              },
-              maxLength: {
-                value: 500,
-                message: "Text cannot exceed 500 characters",
-              },
-            })}
-          />
-          {errors.body && (
-            <p className={`${styles.validationError} ${styles.lessMargin}`}>
-              {errors?.body.message}
-            </p>
-          )}
-        </div>
-
+    <DynamicForm
+      inputsProperties={
+        state
+          ? addDefaultValues(inputsProperties, body, description, title)
+          : inputsProperties
+      }
+      onSubmit={onSubmit}
+      formHeader={state ? "Edit article" : "Create new article"}
+      loader={state ? isEditLoading : isCreateLoading}
+      loaderElement={<Spin size="large" />}
+      error={state ? isEditError : isCreateError}
+      submitErrorText="Server error or user is unauthorized"
+      submitButtonText={state ? "Update" : "Create"}
+      formStyle="article"
+      extraUniqueComponents={
         <div className={styles.tagsArea}>
           <div className={styles.inputGroup}>
             <label>Tags</label>
@@ -207,16 +144,7 @@ export default function NewArticle() {
             </button>
           )}
         </div>
-        {state ? (
-          <button type="submit" className={styles.createButton}>
-            Update
-          </button>
-        ) : (
-          <button type="submit" className={styles.createButton}>
-            Create
-          </button>
-        )}
-      </form>
-    </div>
+      }
+    />
   );
 }

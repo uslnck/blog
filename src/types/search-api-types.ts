@@ -43,18 +43,18 @@ export interface IFormData {
 
 export interface INewArticle {
   formData: {
-    title: string;
-    description: string;
-    body: string;
+    title?: string;
+    description?: string;
+    body?: string;
     tags?: string[];
   };
   token: string;
 }
 
 export interface INewArticleForm {
-  title: string;
-  description: string;
-  body: string;
+  title?: string;
+  description?: string;
+  body?: string;
   tags?: string[];
 }
 
@@ -80,9 +80,9 @@ export interface IArticleResponse {
 
 export interface IEditArticleData {
   formData: {
-    title: string;
-    description: string;
-    body: string;
+    title?: string;
+    description?: string;
+    body?: string;
   };
   token: string;
   slug: string;

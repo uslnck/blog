@@ -10,6 +10,7 @@ export const inputsProperties = [
     rhfMinLengthValue: 3,
     rhfMaxLengthMessage: "Username cannot exceed 20 characters",
     rhfMaxLengthValue: 20,
+    inputStyle: "user",
   },
   {
     labelContent: "Email",
@@ -20,6 +21,7 @@ export const inputsProperties = [
     rhfRequiredMessage: "Email is required",
     rhfPatternValue: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i,
     rhfPatternMessage: "Invalid email address",
+    inputStyle: "user",
   },
   {
     labelContent: "Avatar image (url)",
@@ -27,5 +29,6 @@ export const inputsProperties = [
     id: "image",
     type: "text",
     autoComplete: "on",
+    inputStyle: "user",
   },
 ];

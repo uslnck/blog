@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import {
   FieldErrors,
   FieldValues,
@@ -5,13 +6,14 @@ import {
   UseFormRegister,
 } from "react-hook-form";
 
-export interface IInputProps {
+export interface IInputsProps {
   labelContent: string;
   register?: boolean | UseFormRegister<FieldValues>;
   rhfName?: string;
   id?: string;
   type?: string;
   autoComplete?: string;
+  defaultValue?: string;
   rhfRequiredMessage?: string;
   rhfMinLengthValue?: number;
   rhfMinLengthMessage?: string;
@@ -21,15 +23,18 @@ export interface IInputProps {
   rhfPatternMessage?: string;
   errors?: FieldErrors<FieldValues>;
   validateWith?: string;
+  inputStyle?: string;
 }
 
 export interface DynamicFormProps {
   formHeader: string;
-  inputsProperties: IInputProps[];
+  inputsProperties: IInputsProps[];
   onSubmit: SubmitHandler<FieldValues>;
   loader: boolean;
   loaderElement: React.ReactNode;
   error: boolean;
   submitErrorText: string;
   submitButtonText: string;
+  formStyle: string;
+  extraUniqueComponents?: ReactNode;
 }

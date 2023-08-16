@@ -34,10 +34,11 @@ export default function UserProfile() {
       onSubmit={onSubmit}
       formHeader="Edit Profile"
       loader={isLoading}
-      loaderElement={<Spin />}
+      loaderElement={<Spin size="large" />}
       error={isError}
       submitErrorText="Error updating profile"
       submitButtonText="Save"
+      formStyle="user"
     />
   );
 }
