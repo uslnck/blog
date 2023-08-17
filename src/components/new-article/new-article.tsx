@@ -6,7 +6,7 @@ import { addDefaultValues, getTagValues } from "./utils";
 import DynamicForm from "../form";
 import { inputsProperties } from "./mock";
 import { Spin } from "antd";
-import { SetStateAction, useEffect, useState } from "react";
+import { SetStateAction, useState } from "react";
 
 export default function NewArticle() {
   const navigate = useNavigate();
@@ -75,7 +75,7 @@ export default function NewArticle() {
       submitErrorText="Server error or user is unauthorized"
       submitButtonText={state ? "Update" : "Create"}
       formStyle="article"
-      onTagsChange={handleTagsChange}
+      tagsHandler={handleTagsChange}
     />
   );
 }

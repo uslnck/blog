@@ -35,5 +35,5 @@ export interface DynamicFormProps {
   submitErrorText: string;
   submitButtonText: string;
   formStyle: string;
-  onTagsChange?: (tags: { id: number }[]) => void;
+  tagsHandler?: (tags: { id: number }[]) => void;
 }

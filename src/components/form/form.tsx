@@ -19,7 +19,7 @@ export default function DynamicForm({
   submitErrorText,
   submitButtonText,
   formStyle,
-  onTagsChange,
+  tagsHandler,
 }: DynamicFormProps) {
   const methods = useForm();
 
@@ -37,8 +37,8 @@ export default function DynamicForm({
   };
 
   useEffect(() => {
-    if (onTagsChange) onTagsChange(tags);
-  }, [onTagsChange, tags]);
+    if (tagsHandler) tagsHandler(tags);
+  }, [tagsHandler, tags]);
 
   return (
     <FormProvider {...methods}>
