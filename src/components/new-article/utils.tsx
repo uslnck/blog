@@ -6,7 +6,7 @@ export const getTagValues = (
   formData: INewArticleForm
 ) => {
   return tags
-    .map((tag) => formData[`tag-${tag.id}` as keyof INewArticleForm])
+    .map((tag) => formData[`tag${tag.id}` as keyof INewArticleForm])
     .filter(
       (tagValue) => typeof tagValue === "string" && tagValue.trim() !== ""
     );

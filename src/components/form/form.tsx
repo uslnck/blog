@@ -3,11 +3,7 @@ import styles from "./form.module.less";
 import Input from "../input";
 import { DynamicFormProps } from "../../types/prop-types";
 import { determineFormStyle } from "./utils";
-import { useEffect, useState } from "react";
-import { INewArticleForm } from "../../types";
-
-let tagStart = 10;
-const maximumTags = 5;
+import Tag from "../tag";
 
 export default function DynamicForm({
   formHeader,
@@ -20,25 +16,9 @@ export default function DynamicForm({
   submitButtonText,
   formStyle,
   tagsHandler,
+  tagsProperties,
 }: DynamicFormProps) {
   const methods = useForm();
-
-  const [tags, setTags] = useState([{ id: 1 }]);
-
-  const handleAddTag = () => {
-    const newTagId = tagStart + 1;
-    tagStart++;
-    setTags([...tags, { id: newTagId }]);
-  };
-
-  const handleDeleteTag = (tagId: number) => {
-    const updatedTags = tags.filter((tag) => tag.id !== tagId);
-    setTags(updatedTags);
-  };
-
-  useEffect(() => {
-    if (tagsHandler) tagsHandler(tags);
-  }, [tagsHandler, tags]);
 
   return (
     <FormProvider {...methods}>
@@ -63,70 +43,17 @@ export default function DynamicForm({
             ))
           : null}
 
-        <div className={styles.tagsArea}>
-          <div className={styles.inputGroup}>
-            <label>Tags</label>
-            {tags.map((tag, i) => (
-              <div key={i} className={styles.addedInputs}>
-                <input
-                  id={`tag-${tag.id}`}
-                  type="text"
-                  className={
-                    methods.formState.errors[
-                      `tag-${tag.id}` as keyof INewArticleForm
-                    ]
-                      ? styles.inputErrorBorder
-                      : ""
-                  }
-                  {...methods.register(
-                    `tag-${tag.id}` as keyof INewArticleForm,
-                    {
-                      pattern: {
-                        value: /^[a-z0-9]{2,}$/,
-                        message: "At least 2 symbols required (no whitespaces)",
-                      },
-                    }
-                  )}
-                />
-
-                {tags.length > 1 ? (
-                  <button
-                    type="button"
-                    className={styles.deleteTagButton}
-                    onClick={() => handleDeleteTag(tag.id)}
-                  >
-                    Delete
-                  </button>
-                ) : (
-                  <button
-                    className={`${styles.deleteTagButton} ${styles.disabledButton}`}
-                    disabled
-                  >
-                    Delete
-                  </button>
-                )}
-
-                {methods.formState.errors[`tag-${tag.id}`] && (
-                  <p className={styles.validationError}>
-                    {
-                      methods.formState.errors[`tag-${tag.id}`]
-                        ?.message as string
-                    }
-                  </p>
-                )}
-              </div>
-            ))}
-          </div>
-          {tags.length < maximumTags && (
-            <button
-              type="button"
-              className={styles.addTagButton}
-              onClick={handleAddTag}
-            >
-              Add tag
-            </button>
-          )}
-        </div>
+        {tagsProperties
+          ? tagsProperties.map((tag, i) => (
+              <Tag
+                key={i}
+                register={tag.rhfName ? methods.register : false}
+                errors={methods.formState.errors}
+                tagsHandler={tagsHandler}
+                {...tag}
+              />
+            ))
+          : null}
 
         {loader ? (
           <div className={styles.loaderContainer}>{loaderElement}</div>

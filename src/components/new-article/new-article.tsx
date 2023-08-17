@@ -4,7 +4,7 @@ import { IEditArticleState, INewArticleForm } from "../../types";
 import { useCreateArticleMutation, useEditArticleMutation } from "../../store";
 import { addDefaultValues, getTagValues } from "./utils";
 import DynamicForm from "../form";
-import { inputsProperties } from "./mock";
+import { inputsProperties, tagsProperties } from "./mock";
 import { Spin } from "antd";
 import { SetStateAction, useState } from "react";
 
@@ -64,7 +64,7 @@ export default function NewArticle() {
     <DynamicForm
       inputsProperties={
         state
-          ? addDefaultValues(inputsProperties, body, description, title)
+          ? addDefaultValues(inputsProperties, title, body, description)
           : inputsProperties
       }
       onSubmit={onSubmit}
@@ -75,6 +75,7 @@ export default function NewArticle() {
       submitErrorText="Server error or user is unauthorized"
       submitButtonText={state ? "Update" : "Create"}
       formStyle="article"
+      tagsProperties={tagsProperties}
       tagsHandler={handleTagsChange}
     />
   );
