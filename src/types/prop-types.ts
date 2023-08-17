@@ -1,4 +1,3 @@
-import { ReactNode } from "react";
 import {
   FieldErrors,
   FieldValues,
@@ -36,5 +35,5 @@ export interface DynamicFormProps {
   submitErrorText: string;
   submitButtonText: string;
   formStyle: string;
-  extraUniqueComponents?: ReactNode;
+  onTagsChange?: (tags: { id: number }[]) => void;
 }
