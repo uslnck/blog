@@ -9,8 +9,8 @@ export interface IInputsProps {
   labelContent: string;
   register?: boolean | UseFormRegister<FieldValues>;
   rhfName?: string;
-  id?: string;
-  type?: string;
+  id: string;
+  type: string;
   autoComplete?: string;
   defaultValue?: string;
   rhfRequiredMessage?: string;
@@ -22,21 +22,20 @@ export interface IInputsProps {
   rhfPatternMessage?: string;
   errors?: FieldErrors<FieldValues>;
   validateWith?: string;
-  inputStyle?: string;
+  inputStyle: string;
 }
 
 export interface ITagsProps {
   register?: boolean | UseFormRegister<FieldValues>;
   rhfName?: string;
-  id?: string;
-  type?: string;
+  id: string;
+  type: string;
   autoComplete?: string;
   defaultValue?: string;
   rhfPatternValue?: RegExp;
   rhfPatternMessage?: string;
   errors?: FieldErrors<FieldValues>;
   validateWith?: string;
-  inputStyle?: string;
   tagsHandler?: (tags: { id: number }[]) => void;
 }
 
@@ -52,4 +51,17 @@ export interface DynamicFormProps {
   formStyle: string;
   tagsProperties?: ITagsProps[];
   tagsHandler?: (tags: { id: number }[]) => void;
+}
+
+export interface IBorderedButtonProps {
+  onClick?: () => void;
+  text: string;
+  color: string;
+  borderColor?: string;
+  padding?: string;
+  type: "button" | "submit" | "reset";
+  disabled?: boolean;
+  position?: string;
+  fontSize?: string;
+  width?: string;
 }

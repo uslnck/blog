@@ -2,6 +2,7 @@ import styles from "./tag.module.less";
 import { ITagsProps } from "../../types/prop-types";
 // import { useFormContext } from "react-hook-form";
 import { useEffect, useState } from "react";
+import BorderedButton from "../bordered-button";
 
 let tagStart = 10;
 const maximumTags = 5;
@@ -69,22 +70,14 @@ export default function Tag({
                 : {})}
             />
 
-            {tags.length > 1 ? (
-              <button
-                type="button"
-                className={styles.deleteTagButton}
-                onClick={() => handleDeleteTag(tag.id)}
-              >
-                Delete
-              </button>
-            ) : (
-              <button
-                className={`${styles.deleteTagButton} ${styles.disabledButton}`}
-                disabled
-              >
-                Delete
-              </button>
-            )}
+            <BorderedButton
+              disabled={tags.length === 1}
+              onClick={() => handleDeleteTag(tag.id)}
+              type="button"
+              text="Delete"
+              color="red"
+              width="118px"
+            />
 
             {errors?.[`${rhfName as string}${tag.id}`] && (
               <p className={styles.validationError}>
@@ -95,13 +88,14 @@ export default function Tag({
         ))}
       </div>
       {tags.length < maximumTags && (
-        <button
-          type="button"
-          className={styles.addTagButton}
+        <BorderedButton
           onClick={handleAddTag}
-        >
-          Add tag
-        </button>
+          type="button"
+          text="Add tag"
+          color="#1890ff"
+          position="flex-end"
+          width="136px"
+        />
       )}
     </div>
   );

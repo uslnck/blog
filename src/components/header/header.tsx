@@ -4,6 +4,7 @@ import styles from "./header.module.less";
 import { /*RootState*/ useGetUserQuery } from "../../store";
 import { useEffect, useState } from "react";
 import { Spin } from "antd";
+import BorderedButton from "../bordered-button";
 
 export default function Header() {
   const [token, setToken] = useState("");
@@ -71,9 +72,14 @@ export default function Header() {
                 />
               </div>
             </Link>
-            <button onClick={handleLogout} className={styles.logOut}>
-              Log Out
-            </button>
+            <BorderedButton
+              onClick={handleLogout}
+              type="button"
+              text="Log Out"
+              padding="10px 15px"
+              color="rgba(0, 0, 0, 0.75)"
+              fontSize="18px"
+            />
           </div>
         )}
       </div>

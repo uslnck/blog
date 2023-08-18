@@ -49,7 +49,7 @@ export const tagsProperties = [
     id: `tag`,
     type: "text",
     autoComplete: "on",
-    rhfPatternValue: /^[a-z0-9]{2,}$/,
-    rhfPatternMessage: "At least 2 symbols required (no whitespaces)",
+    rhfPatternValue: /^[a-z0-9]{2,15}$/,
+    rhfPatternMessage: "2–15 lowercase symbols required (no whitespaces)",
   },
 ];
