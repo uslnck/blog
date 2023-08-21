@@ -35,14 +35,7 @@ export default function Tag({
   };
 
   useEffect(() => {
-    if (tagsHandler) {
-      console.log(
-        "tagsHandler passed Tag state to NewArticle tags VARIABLE this:",
-        tags
-      );
-
-      tagsHandler(tags);
-    }
+    if (tagsHandler) tagsHandler(tags);
   }, [tagsHandler, tags]);
 
   const handleTagValueChange = (tagId: number, newValue: string) => {
