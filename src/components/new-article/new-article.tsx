@@ -2,33 +2,31 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { SubmitHandler } from "react-hook-form";
 import { IEditArticleState, INewArticleForm } from "../../types";
 import { useCreateArticleMutation, useEditArticleMutation } from "../../store";
-import { addDefaultValues, getTagValues } from "./utils";
+import { addDefaultTags, addDefaultValues } from "./utils";
 import DynamicForm from "../form";
 import { inputsProperties, tagsProperties } from "./mock";
 import { Spin } from "antd";
-import { SetStateAction, useState } from "react";
+
+let tags = [{ id: 0, value: "" }];
 
 export default function NewArticle() {
   const navigate = useNavigate();
 
   const location = useLocation();
   const state = location.state as IEditArticleState;
-  const { body, description, title, slug } = state || {};
+  const { body, description, title, slug, tagList } = state || {};
 
-  const [tags, setTags] = useState([{ id: 1 }]);
-
-  const handleTagsChange = (updatedTags: SetStateAction<{ id: number }[]>) => {
-    setTags(updatedTags);
+  const handleTagsChange = (updatedTags: { id: number; value: string }[]) => {
+    tags = updatedTags;
   };
 
   const onSubmit: SubmitHandler<INewArticleForm> = async (formData) => {
-    const tagValues = getTagValues(tags, formData);
-
+    const tagList = tags.map((tag) => tag.value);
     const articleData = {
       title: formData.title,
       description: formData.description,
       body: formData.body,
-      tagList: tagValues,
+      tagList: tagList,
     };
 
     await (state
@@ -75,7 +73,9 @@ export default function NewArticle() {
       submitErrorText="Server error or user is unauthorized"
       submitButtonText={state ? "Update" : "Create"}
       formStyle="article"
-      tagsProperties={tagsProperties}
+      tagsProperties={
+        state ? addDefaultTags(tagsProperties, tagList) : tagsProperties
+      }
       tagsHandler={handleTagsChange}
     />
   );

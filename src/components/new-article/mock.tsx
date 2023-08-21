@@ -45,10 +45,12 @@ export const inputsProperties = [
 
 export const tagsProperties = [
   {
-    rhfName: `tag`,
-    id: `tag`,
+    rhfName: "tag",
+    id: "tag",
+    defaultValue: "",
     type: "text",
     autoComplete: "on",
+    rhfRequiredMessage: "2–15 lowercase symbols required (no whitespaces)",
     rhfPatternValue: /^[a-z0-9]{2,15}$/,
     rhfPatternMessage: "2–15 lowercase symbols required (no whitespaces)",
   },

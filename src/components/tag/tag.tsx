@@ -1,46 +1,56 @@
 import styles from "./tag.module.less";
 import { ITagsProps } from "../../types/prop-types";
-// import { useFormContext } from "react-hook-form";
 import { useEffect, useState } from "react";
 import BorderedButton from "../bordered-button";
 
-let tagStart = 10;
 const maximumTags = 5;
 
 export default function Tag({
   id,
   type,
   autoComplete,
-  defaultValue,
+  defaultValues,
   register,
   rhfName,
+  rhfRequiredMessage,
   rhfPatternValue,
   rhfPatternMessage,
   errors,
-  // validateWith,
   tagsHandler,
 }: ITagsProps) {
-  // const methods = useFormContext();
-  // let watchField: ReturnType<typeof methods.watch>;
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  // if (validateWith) watchField = methods.watch(validateWith);
-
-  const [tags, setTags] = useState([{ id: 1 }]);
+  const [tags, setTags] = useState(defaultValues || [{ id: 0, value: "" }]);
+  const [tagCounter, setTagCounter] = useState(tags.length);
 
   const handleAddTag = () => {
-    const newTagId = tagStart + 1;
-    tagStart++;
-    setTags([...tags, { id: newTagId }]);
+    setTagCounter((prevCounter) => prevCounter + 1);
+    setTags((prevTags) => [...prevTags, { id: tagCounter, value: "" }]);
   };
 
   const handleDeleteTag = (tagId: number) => {
     const updatedTags = tags.filter((tag) => tag.id !== tagId);
     setTags(updatedTags);
+
+    const highestExistingId = Math.max(...updatedTags.map((tag) => tag.id), 0);
+    setTagCounter(highestExistingId + 1);
   };
 
   useEffect(() => {
-    if (tagsHandler) tagsHandler(tags);
+    if (tagsHandler) {
+      console.log(
+        "tagsHandler passed Tag state to NewArticle tags VARIABLE this:",
+        tags
+      );
+
+      tagsHandler(tags);
+    }
   }, [tagsHandler, tags]);
+
+  const handleTagValueChange = (tagId: number, newValue: string) => {
+    const updatedTags = tags.map((tag) =>
+      tag.id === tagId ? { ...tag, value: newValue } : tag
+    );
+    setTags(updatedTags);
+  };
 
   return (
     <div className={styles.tagsArea}>
@@ -52,7 +62,7 @@ export default function Tag({
               id={id}
               type={type}
               autoComplete={autoComplete}
-              defaultValue={defaultValue as string}
+              defaultValue={tag?.value}
               className={
                 errors?.[`${rhfName as string}${tag.id}`]
                   ? styles.inputErrorBorder
@@ -61,6 +71,7 @@ export default function Tag({
               {...(register !== undefined && typeof register !== "boolean"
                 ? {
                     ...register(`${rhfName as string}${tag.id}`, {
+                      required: rhfRequiredMessage as string,
                       pattern: {
                         value: rhfPatternValue as RegExp,
                         message: rhfPatternMessage as string,
@@ -68,6 +79,7 @@ export default function Tag({
                     }),
                   }
                 : {})}
+              onChange={(e) => handleTagValueChange(tag.id, e.target.value)}
             />
 
             <BorderedButton

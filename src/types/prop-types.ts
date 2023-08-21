@@ -31,12 +31,13 @@ export interface ITagsProps {
   id: string;
   type: string;
   autoComplete?: string;
-  defaultValue?: string;
+  defaultValues?: { id: number; value: string }[];
+  rhfRequiredMessage?: string;
   rhfPatternValue?: RegExp;
   rhfPatternMessage?: string;
   errors?: FieldErrors<FieldValues>;
   validateWith?: string;
-  tagsHandler?: (tags: { id: number }[]) => void;
+  tagsHandler?: (tags: { id: number; value: string }[]) => void;
 }
 
 export interface DynamicFormProps {
@@ -50,18 +51,21 @@ export interface DynamicFormProps {
   submitButtonText: string;
   formStyle: string;
   tagsProperties?: ITagsProps[];
-  tagsHandler?: (tags: { id: number }[]) => void;
+  tagsHandler?: (tags: { id: number; value: string }[]) => void;
 }
 
 export interface IBorderedButtonProps {
   onClick?: () => void;
   text: string;
+  lineHeight?: string;
   color: string;
   borderColor?: string;
   padding?: string;
-  type: "button" | "submit" | "reset";
+  type?: "button" | "submit" | "reset";
   disabled?: boolean;
   position?: string;
   fontSize?: string;
   width?: string;
+  linkTo?: string;
+  linkState?: object;
 }

@@ -39,4 +39,5 @@ export interface IEditArticleState {
   description: string;
   body: string;
   slug: string;
+  tagList: string[];
 }

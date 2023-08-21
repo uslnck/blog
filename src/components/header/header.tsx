@@ -57,9 +57,15 @@ export default function Header() {
           <Spin />
         ) : (
           <div className={styles.signedContainer}>
-            <Link className={styles.newArticle} to={"/new-article"}>
-              Create article
-            </Link>
+            <BorderedButton
+              text="Create article"
+              lineHeight="22px"
+              padding="6px 10px"
+              color="#52C41A"
+              fontSize="14px"
+              linkTo="/new-article"
+              position="align-center"
+            />
             <Link className={styles.signUp} to={"/profile"}>
               <div className={styles.usernameAvatarContainer}>
                 <span className={styles.username}>

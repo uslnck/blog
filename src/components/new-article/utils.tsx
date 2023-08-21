@@ -1,16 +1,4 @@
-import { INewArticleForm } from "../../types";
-import { IInputsProps } from "../../types/prop-types";
-
-export const getTagValues = (
-  tags: { id: number }[],
-  formData: INewArticleForm
-) => {
-  return tags
-    .map((tag) => formData[`tag${tag.id}` as keyof INewArticleForm])
-    .filter(
-      (tagValue) => typeof tagValue === "string" && tagValue.trim() !== ""
-    );
-};
+import { IInputsProps, ITagsProps } from "../../types/prop-types";
 
 export const addDefaultValues = (
   inputsProperties: IInputsProps[],
@@ -18,16 +6,32 @@ export const addDefaultValues = (
   body: string,
   description: string
 ) => {
-  const updatedInputs = inputsProperties.map((input) => {
-    if (input.labelContent === "Title") {
-      return { ...input, defaultValue: title };
-    } else if (input.labelContent === "Text") {
-      return { ...input, defaultValue: body };
-    } else if (input.labelContent === "Short description") {
-      return { ...input, defaultValue: description };
+  const updatedInputs = inputsProperties.map((props) => {
+    if (props.labelContent === "Title") {
+      return { ...props, defaultValue: title };
+    } else if (props.labelContent === "Text") {
+      return { ...props, defaultValue: body };
+    } else if (props.labelContent === "Short description") {
+      return { ...props, defaultValue: description };
     }
-    return input;
+    return props;
   });
 
   return updatedInputs;
+};
+
+export const addDefaultTags = (
+  tagsProperties: ITagsProps[],
+  tagList: string[]
+) => {
+  const updatedTags = tagsProperties.map((props) => {
+    return {
+      ...props,
+      defaultValues: tagList.map((tag, i) => {
+        return { id: 1000 + i, value: tag };
+      }),
+    };
+  });
+
+  return updatedTags;
 };

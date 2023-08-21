@@ -1,6 +1,6 @@
 import styles from "./article-inside.module.less";
 import UserInfo from "../user-info";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { IArticle, IArticleResponse } from "../../types";
 import Markdown from "markdown-to-jsx";
 import {
@@ -12,6 +12,7 @@ import {
 import { getSlug } from "./utils";
 import { useEffect, useState } from "react";
 import { Spin } from "antd";
+import BorderedButton from "../bordered-button";
 
 export default function ArticleInside() {
   const navigate = useNavigate();
@@ -57,6 +58,7 @@ export default function ArticleInside() {
     description: description || article?.description,
     body: body || article?.body,
     slug: slug || article?.slug,
+    tagList: tagList || article?.tagList,
   };
   const articleFavorited = favorited ?? article?.favorited;
 
@@ -156,26 +158,29 @@ export default function ArticleInside() {
           {articleAuthor &&
           articleAuthor.username === localStorage.getItem("username") ? (
             <div className={styles.editDeleteContainer}>
-              <button
-                className={styles.deleteArticle}
+              <BorderedButton
                 onClick={() => void handleDeleteArticle()}
-              >
-                Delete
-              </button>
-              <Link
-                to={`/new-article`}
-                className={styles.editArticle}
-                state={articleContent}
-              >
-                Edit
-              </Link>
+                type="button"
+                text="Delete"
+                padding="8px 16px"
+                color="red"
+                fontSize="14px"
+              />
+              <BorderedButton
+                text="Edit"
+                padding="8px 16px"
+                color="#52C41A"
+                fontSize="14px"
+                linkTo="/new-article"
+                linkState={articleContent}
+              />
             </div>
           ) : null}
         </div>
       </div>
       <div className={styles.descriptionInsideText}>
         <Markdown>
-          {body || article?.body || "No article text provided!"}
+          {body || article?.body || "[No article text provided!]"}
         </Markdown>
       </div>
     </div>
