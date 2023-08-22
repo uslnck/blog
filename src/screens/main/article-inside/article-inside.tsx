@@ -1,18 +1,18 @@
 import styles from "./article-inside.module.less";
 import UserInfo from "../user-info";
 import { useLocation, useNavigate } from "react-router-dom";
-import { IArticle, IArticleResponse } from "../../types";
+import { IArticle, IArticleResponse } from "../../../types";
 import Markdown from "markdown-to-jsx";
 import {
   useDeleteArticleMutation,
   useGetArticleQuery,
   useLikeArticleMutation,
   useUnlikeArticleMutation,
-} from "../../store";
+} from "../../../store";
 import { getSlug } from "./utils";
 import { useEffect, useState } from "react";
 import { Spin } from "antd";
-import BorderedButton from "../bordered-button";
+import BorderedButton from "../../../components/bordered-button";
 
 export default function ArticleInside() {
   const navigate = useNavigate();

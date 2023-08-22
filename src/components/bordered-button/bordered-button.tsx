@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { IBorderedButtonProps } from "../../types/prop-types";
+import { IBorderedButtonProps } from "../../types";
 import styles from "./bordered-button.module.less";
 import { Link } from "react-router-dom";
 

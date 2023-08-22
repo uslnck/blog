@@ -1,6 +1,6 @@
 import "./App.less";
 import Header from "./components/header";
-import Main from "./components/main";
+import Main from "./screens/main";
 
 export default function Blog() {
   return (

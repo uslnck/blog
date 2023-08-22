@@ -1,16 +1,10 @@
 import styles from "./article-list.module.less";
 import Article from "../article";
-import { useGetArticlesQuery } from "../../store";
-import { Pagination, Spin } from "antd";
-import { IArticleListProps } from "../../types";
+import { useGetArticlesQuery } from "../../../store";
+import { Spin } from "antd";
+import { IArticleListProps } from "../../../types";
 
-export default function ArticleList({
-  currentOffset,
-  currentPage,
-  handlePageChange,
-  pageSize,
-  pagesCount,
-}: IArticleListProps) {
+export default function ArticleList({ currentOffset }: IArticleListProps) {
   const {
     data: articlesObject = { articles: [] },
     isFetching,
@@ -50,15 +44,6 @@ export default function ArticleList({
           ))
         )}
       </ul>
-      <div className={styles.paginationContainer}>
-        <Pagination
-          showSizeChanger={false}
-          current={currentPage}
-          pageSize={pageSize}
-          total={pageSize * pagesCount}
-          onChange={(page) => handlePageChange(page)}
-        />
-      </div>
     </>
   );
 }

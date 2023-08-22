@@ -1,5 +1,5 @@
 import styles from "./input.module.less";
-import { IInputsProps } from "../../types/prop-types";
+import { IInputsProps } from "../../types";
 import { useFormContext } from "react-hook-form";
 import { determineInputStyle } from "./utils";
 

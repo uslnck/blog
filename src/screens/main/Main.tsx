@@ -1,13 +1,14 @@
-import ArticleInside from "../article-inside";
-import ArticleList from "../article-list";
-import styles from "./main.module.less";
-import { Routes, Route } from "react-router-dom";
-import NotFound from "../not-found";
+import { Pagination } from "antd";
+import ArticleList from "./article-list";
 import { useState } from "react";
-import SignUp from "../sign-up";
-import SignIn from "../sign-in";
-import UserProfile from "../user-profile";
-import NewArticle from "../new-article";
+import { Route, Routes } from "react-router-dom";
+import ArticleInside from "./article-inside";
+import SignIn from "./sign-in";
+import SignUp from "./sign-up";
+import UserProfile from "./user-profile";
+import NewArticle from "./new-article";
+import NotFound from "./not-found";
+import styles from "./Main.module.less";
 
 const pageSize = 5;
 const pagesCount = 5;
@@ -30,13 +31,17 @@ export default function Main() {
               key={i}
               path={path}
               element={
-                <ArticleList
-                  currentPage={currentPage}
-                  currentOffset={currentOffset}
-                  handlePageChange={handlePageChange}
-                  pageSize={pageSize}
-                  pagesCount={pagesCount}
-                />
+                <div className={styles.articleListPaginationContainer}>
+                  <ArticleList currentOffset={currentOffset} />
+                  <Pagination
+                    showSizeChanger={false}
+                    current={currentPage}
+                    pageSize={pageSize}
+                    total={pageSize * pagesCount}
+                    onChange={(page) => handlePageChange(page)}
+                    style={{ marginBottom: "20px" }}
+                  />
+                </div>
               }
             />
           ))}

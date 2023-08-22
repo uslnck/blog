@@ -1,7 +1,7 @@
 import { useForm, FormProvider } from "react-hook-form";
 import styles from "./form.module.less";
 import Input from "../input";
-import { DynamicFormProps } from "../../types/prop-types";
+import { DynamicFormProps } from "../../types";
 import { determineFormStyle } from "./utils";
 import Tag from "../tag";
 

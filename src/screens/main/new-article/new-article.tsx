@@ -1,9 +1,12 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { SubmitHandler } from "react-hook-form";
-import { IEditArticleState, INewArticleForm } from "../../types";
-import { useCreateArticleMutation, useEditArticleMutation } from "../../store";
+import { IEditArticleState, INewArticleForm } from "../../../types";
+import {
+  useCreateArticleMutation,
+  useEditArticleMutation,
+} from "../../../store";
 import { addDefaultTags, addDefaultValues } from "./utils";
-import DynamicForm from "../form";
+import DynamicForm from "../../../components/form";
 import { inputsProperties, tagsProperties } from "./mock";
 import { Spin } from "antd";
 

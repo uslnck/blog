@@ -1,6 +1,6 @@
-import { IUserInfo } from "../../types";
+import { IUserInfo } from "../../../types";
 import styles from "./user-info.module.less";
-import { formatDate } from "../../utils/helpers/date-fns";
+import { formatDate } from "../../../utils/helpers/date-fns";
 
 export default function UserInfo({ author, createdAt }: IUserInfo) {
   const { username, image /*following, bio*/ } = author;

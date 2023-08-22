@@ -16,14 +16,6 @@ export interface IArticle {
   };
 }
 
-export interface IArticleListProps {
-  currentOffset: number;
-  currentPage: number;
-  handlePageChange: (page: number) => void;
-  pageSize: number;
-  pagesCount: number;
-}
-
 export interface IUserInfo {
   author: {
     username: string;

@@ -69,3 +69,7 @@ export interface IBorderedButtonProps {
   linkTo?: string;
   linkState?: object;
 }
+
+export interface IArticleListProps {
+  currentOffset: number;
+}
