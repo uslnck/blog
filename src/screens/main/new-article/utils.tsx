@@ -1,4 +1,4 @@
-import { IInputsProps, ITagsProps } from "../../types/prop-types";
+import { IInputsProps, ITagsProps } from "../../../types/prop-types";
 
 export const addDefaultValues = (
   inputsProperties: IInputsProps[],
