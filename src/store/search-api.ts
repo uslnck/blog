@@ -24,7 +24,7 @@ const staggeredBaseQueryWithBailOut = retry(
     })(args, api, extraOptions);
 
     if (result.error?.status === 422) {
-      console.log("User already exists or login credentials are wrong");
+      console.log("User already exist or login credentials are wrong");
       retry.fail(result.error);
     }
     if (result.error?.status === 401) {
