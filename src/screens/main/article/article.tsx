@@ -22,8 +22,8 @@ export default function Article({
   updatedAt,
 }: IArticleProps) {
   const [articleLikesCount, setArticleLikesCount] = useState(favoritesCount);
-
   const [hasLiked, setHasLiked] = useState(false);
+
   const [likeArticle, { isLoading: likeLoading }] = useLikeArticleMutation();
   const [unlikeArticle, { isLoading: unlikeLoading }] =
     useUnlikeArticleMutation();

@@ -34,6 +34,7 @@ export default function ArticleInside() {
 
   const [slugInState, setSlugInState] = useState(slug || "");
   const [skip, setSkip] = useState(true);
+  const [hasLiked, setHasLiked] = useState(false);
 
   useEffect(() => {
     if (!state) {
@@ -63,12 +64,7 @@ export default function ArticleInside() {
   };
   const articleFavorited = favorited ?? article?.favorited;
 
-  const [deleteArticle /*, {}*/] = useDeleteArticleMutation();
-
-  const [hasLiked, setHasLiked] = useState(false);
-  const [likeArticle, { isLoading: likeLoading }] = useLikeArticleMutation();
-  const [unlikeArticle, { isLoading: unlikeLoading }] =
-    useUnlikeArticleMutation();
+  const [deleteArticle] = useDeleteArticleMutation();
 
   const handleDeleteArticle = async () => {
     if (window.confirm("Are you sure you want to delete this article?")) {
@@ -80,6 +76,10 @@ export default function ArticleInside() {
       navigate(0);
     }
   };
+
+  const [likeArticle, { isLoading: likeLoading }] = useLikeArticleMutation();
+  const [unlikeArticle, { isLoading: unlikeLoading }] =
+    useUnlikeArticleMutation();
 
   useEffect(() => {
     setHasLiked(articleFavorited);

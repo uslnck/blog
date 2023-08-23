@@ -1,7 +1,7 @@
-import { IArticle } from ".";
+import { IArticleProps } from ".";
 
 export interface IGetArticlesResponse {
-  articles: IArticle[];
+  articles: IArticleProps[];
 }
 
 export interface ILoginData {
