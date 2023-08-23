@@ -73,3 +73,30 @@ export interface IBorderedButtonProps {
 export interface IArticleListProps {
   currentOffset: number;
 }
+
+export interface ILikeProps {
+  handleLike: () => Promise<void>;
+  hasLiked: boolean;
+  likeLoading: boolean;
+  unlikeLoading: boolean;
+  articleFavorited: boolean;
+  articleLikesCount: number;
+}
+
+export interface IArticleProps {
+  slug: string;
+  title: string;
+  description: string;
+  body: string;
+  tagList: string[];
+  createdAt: string;
+  updatedAt: string;
+  favorited: boolean;
+  favoritesCount: number;
+  author: {
+    username: string;
+    bio: string;
+    image: string;
+    following: boolean;
+  };
+}

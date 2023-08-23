@@ -1,7 +1,13 @@
 import styles from "./article.module.less";
 import UserInfo from "../user-info";
-import { IArticle } from "../../../types";
+import { IArticleProps } from "../../../types";
 import { Link } from "react-router-dom";
+import Like from "../../../components/like";
+import { useEffect, useState } from "react";
+import {
+  useLikeArticleMutation,
+  useUnlikeArticleMutation,
+} from "../../../store";
 
 export default function Article({
   author,
@@ -14,7 +20,36 @@ export default function Article({
   tagList,
   title,
   updatedAt,
-}: IArticle) {
+}: IArticleProps) {
+  const [articleLikesCount, setArticleLikesCount] = useState(favoritesCount);
+
+  const [hasLiked, setHasLiked] = useState(false);
+  const [likeArticle, { isLoading: likeLoading }] = useLikeArticleMutation();
+  const [unlikeArticle, { isLoading: unlikeLoading }] =
+    useUnlikeArticleMutation();
+
+  useEffect(() => {
+    setHasLiked(favorited);
+  }, [favorited]);
+
+  const handleLike = async () => {
+    if (hasLiked) {
+      setHasLiked(false);
+      setArticleLikesCount((prev) => prev - 1);
+      await unlikeArticle({
+        slug: slug,
+        token: localStorage.getItem("token") as string,
+      });
+    } else {
+      setHasLiked(true);
+      setArticleLikesCount((prev) => prev + 1);
+      await likeArticle({
+        slug: slug,
+        token: localStorage.getItem("token") as string,
+      });
+    }
+  };
+
   return (
     <li className={styles.article}>
       <div className={styles.textContainer}>
@@ -37,17 +72,14 @@ export default function Article({
           >
             {title}
           </Link>
-          <div className={styles.articleLikesContainer}>
-            <div className={styles.likeButton}>
-              <img
-                src={
-                  favorited ? `${"../../liked.svg"}` : `${"../../heart.svg"}`
-                }
-                alt="heart"
-              />
-            </div>
-            <span className={styles.likeCount}>{favoritesCount}</span>
-          </div>
+          <Like
+            handleLike={handleLike}
+            hasLiked={hasLiked}
+            likeLoading={likeLoading}
+            unlikeLoading={unlikeLoading}
+            articleFavorited={favorited}
+            articleLikesCount={articleLikesCount}
+          />
         </div>
         <ul className={styles.tagContainer}>
           {tagList.map((tag, i) => (

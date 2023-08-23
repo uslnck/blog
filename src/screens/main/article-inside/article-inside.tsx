@@ -1,7 +1,7 @@
 import styles from "./article-inside.module.less";
 import UserInfo from "../user-info";
 import { useLocation, useNavigate } from "react-router-dom";
-import { IArticle, IArticleResponse } from "../../../types";
+import { IArticleProps, IArticleResponse } from "../../../types";
 import Markdown from "markdown-to-jsx";
 import {
   useDeleteArticleMutation,
@@ -13,11 +13,12 @@ import { getSlug } from "./utils";
 import { useEffect, useState } from "react";
 import { Spin } from "antd";
 import BorderedButton from "../../../components/bordered-button";
+import Like from "../../../components/like";
 
 export default function ArticleInside() {
   const navigate = useNavigate();
   const location = useLocation();
-  const state = location.state as IArticle;
+  const state = location.state as IArticleProps;
 
   const {
     author,
@@ -114,29 +115,14 @@ export default function ArticleInside() {
             <h5 className={styles.articleInsideTitle}>
               {title || article?.title}
             </h5>
-            <div className={styles.articleInsideLikesContainer}>
-              <button
-                onClick={() => void handleLike()}
-                className={`${styles.likeInsideButton} ${
-                  hasLiked ? styles.likedButton : ""
-                }`}
-                disabled={
-                  !localStorage.getItem("token") || likeLoading || unlikeLoading
-                }
-              >
-                <img
-                  src={
-                    articleFavorited
-                      ? `${"../../liked.svg"}`
-                      : `${"../../heart.svg"}`
-                  }
-                  alt="heart"
-                />
-              </button>
-              <span className={styles.likeInsideCount}>
-                {articleLikesCount}
-              </span>
-            </div>
+            <Like
+              handleLike={handleLike}
+              hasLiked={hasLiked}
+              likeLoading={likeLoading}
+              unlikeLoading={unlikeLoading}
+              articleFavorited={articleFavorited}
+              articleLikesCount={articleLikesCount}
+            />
           </div>
           <ul className={styles.tagInsideContainer}>
             {(tagList || []).concat(article?.tagList || []).map((tag, i) => (
