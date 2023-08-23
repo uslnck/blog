@@ -20,7 +20,7 @@ export default function SignIn() {
     await loginUser(userData);
   };
 
-  if (data !== undefined) {
+  if (data) {
     localStorage.setItem("token", data.user.token);
     localStorage.setItem("username", data.user.username);
     navigate("/");

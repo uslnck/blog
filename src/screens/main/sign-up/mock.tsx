@@ -5,11 +5,8 @@ export const inputsProperties = [
     id: "username",
     type: "text",
     autoComplete: "on",
-    rhfRequiredMessage: "Username is required",
-    rhfMinLengthMessage: "Username must be at least 3 characters long",
-    rhfMinLengthValue: 3,
-    rhfMaxLengthMessage: "Username cannot exceed 20 characters",
-    rhfMaxLengthValue: 20,
+    rhfPatternValue: /^[a-z0-9]{3,15}$/,
+    rhfPatternMessage: "3–15 latin characters or numbers required (no symbols)",
     inputStyle: "user",
   },
   {
