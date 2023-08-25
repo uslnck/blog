@@ -43,9 +43,10 @@ export default function ArticleInside() {
     }
   }, [state]);
 
-  const { data: articleObject, isFetching } = useGetArticleQuery(slugInState, {
-    skip,
-  });
+  const { data: articleObject = { article: {} }, isFetching } =
+    useGetArticleQuery(slugInState, {
+      skip,
+    });
   const { article } = articleObject as IArticleResponse;
 
   const [articleLikesCount, setArticleLikesCount] = useState(
