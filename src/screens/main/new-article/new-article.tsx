@@ -58,7 +58,6 @@ export default function NewArticle() {
 
   if (isCreateSuccess || isEditSuccess) {
     navigate("/");
-    navigate(0);
   }
 
   return (

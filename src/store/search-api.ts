@@ -44,10 +44,11 @@ const staggeredBaseQueryWithBailOut = retry(
 export const searchApi = createApi({
   reducerPath: "searchApi",
   baseQuery: staggeredBaseQueryWithBailOut,
-  tagTypes: ["Likes"],
+  tagTypes: ["Articles"],
   endpoints: (build) => ({
     getArticles: build.query<IGetArticlesResponse, number>({
       query: (offset) => `/articles?limit=5&offset=${offset}`,
+      providesTags: ["Articles"],
     }),
     createUser: build.mutation<ISignResponse, IFormData>({
       query: (formData) => ({
@@ -103,7 +104,6 @@ export const searchApi = createApi({
           url: `/articles/${slug}`,
         };
       },
-      // providesTags: ["Likes"],
     }),
     editArticle: build.mutation<IArticleResponse, IEditArticleData>({
       query: ({ formData, token, slug }) => ({
@@ -115,6 +115,7 @@ export const searchApi = createApi({
         },
         body: { article: formData },
       }),
+      invalidatesTags: ["Articles"],
     }),
     deleteArticle: build.mutation<IDeleteArticleResponse, IDeleteArticleData>({
       query: ({ slug, token }) => ({
