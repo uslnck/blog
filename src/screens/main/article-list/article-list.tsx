@@ -2,15 +2,15 @@ import styles from "./article-list.module.less";
 import Article from "../article";
 import { useGetArticlesQuery } from "../../../store";
 import { Spin } from "antd";
-import { IArticleListProps } from "../../../types";
+import { IArticleListProps, IGetArticlesResponse } from "../../../types";
 
 export default function ArticleList({ currentOffset }: IArticleListProps) {
   const {
-    data: articlesObject = { articles: [] },
+    data: articlesObject,
     isFetching,
     // refetch,
   } = useGetArticlesQuery(currentOffset);
-  const { articles } = articlesObject;
+  const { articles } = articlesObject as IGetArticlesResponse;
 
   console.log(articles);
 
