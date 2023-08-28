@@ -15,6 +15,10 @@ import {
   IDeleteArticleResponse,
   IDeleteArticleData,
   IEditArticleData,
+  IGetArticlesData,
+  IGetArticleData,
+  ILikeArticleData,
+  IUnlikeArticleData,
 } from "../types";
 
 const staggeredBaseQueryWithBailOut = retry(
@@ -44,10 +48,17 @@ const staggeredBaseQueryWithBailOut = retry(
 export const searchApi = createApi({
   reducerPath: "searchApi",
   baseQuery: staggeredBaseQueryWithBailOut,
-  tagTypes: ["Articles"],
+  tagTypes: ["Articles", "Single article"],
   endpoints: (build) => ({
-    getArticles: build.query<IGetArticlesResponse, number>({
-      query: (offset) => `/articles?limit=5&offset=${offset}`,
+    getArticles: build.query<IGetArticlesResponse, IGetArticlesData>({
+      query: ({ currentOffset, token }) => ({
+        url: `/articles?limit=5&offset=${currentOffset}`,
+        method: "GET",
+        headers: {
+          Authorization: `Token ${token}`,
+          "Content-Type": "application/json",
+        },
+      }),
       providesTags: ["Articles"],
     }),
     createUser: build.mutation<ISignResponse, IFormData>({
@@ -96,12 +107,17 @@ export const searchApi = createApi({
         },
         body: { article: formData },
       }),
+      invalidatesTags: ["Articles"],
     }),
-    getArticle: build.query<IArticleResponse, string>({
-      query: (slug) => {
+    getArticle: build.query<IArticleResponse, IGetArticleData>({
+      query: ({ slug, token }) => {
         console.log("Requested article from server");
         return {
           url: `/articles/${slug}`,
+          headers: {
+            Authorization: `Token ${token}`,
+            "Content-Type": "application/json",
+          },
         };
       },
     }),
@@ -125,8 +141,9 @@ export const searchApi = createApi({
           Authorization: `Token ${token}`,
         },
       }),
+      invalidatesTags: ["Articles"],
     }),
-    likeArticle: build.mutation<IDeleteArticleResponse, IDeleteArticleData>({
+    likeArticle: build.mutation<IArticleResponse, ILikeArticleData>({
       query: ({ slug, token }) => ({
         url: `/articles/${slug}/favorite`,
         method: "POST",
@@ -135,7 +152,17 @@ export const searchApi = createApi({
         },
       }),
     }),
-    unlikeArticle: build.mutation<IDeleteArticleResponse, IDeleteArticleData>({
+    likeArticleInside: build.mutation<IArticleResponse, ILikeArticleData>({
+      query: ({ slug, token }) => ({
+        url: `/articles/${slug}/favorite`,
+        method: "POST",
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      }),
+      invalidatesTags: ["Articles"],
+    }),
+    unlikeArticle: build.mutation<IArticleResponse, IUnlikeArticleData>({
       query: ({ slug, token }) => ({
         url: `/articles/${slug}/favorite`,
         method: "DELETE",
@@ -143,6 +170,16 @@ export const searchApi = createApi({
           Authorization: `Token ${token}`,
         },
       }),
+    }),
+    unlikeArticleInside: build.mutation<IArticleResponse, IUnlikeArticleData>({
+      query: ({ slug, token }) => ({
+        url: `/articles/${slug}/favorite`,
+        method: "DELETE",
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      }),
+      invalidatesTags: ["Articles"],
     }),
   }),
 });
@@ -159,4 +196,6 @@ export const {
   useDeleteArticleMutation,
   useLikeArticleMutation,
   useUnlikeArticleMutation,
+  useUnlikeArticleInsideMutation,
+  useLikeArticleInsideMutation,
 } = searchApi;

@@ -32,7 +32,7 @@ export default function Header() {
     return (
       <header>
         <div className={styles.headerContainer}>
-          <Link className={styles.title} to={"/articles"}>
+          <Link className={styles.title} to={"/articles"} replace>
             Realworld Blog
           </Link>
           <div className={styles.signContainer}>

@@ -3,7 +3,6 @@ import styles from "./like.module.less";
 
 export default function Like({
   handleLike,
-  hasLiked,
   likeLoading,
   unlikeLoading,
   articleFavorited,
@@ -13,9 +12,7 @@ export default function Like({
     <div className={styles.articleInsideLikesContainer}>
       <button
         onClick={() => void handleLike()}
-        className={`${styles.likeInsideButton} ${
-          hasLiked ? styles.likedButton : ""
-        }`}
+        className={styles.likeInsideButton}
         disabled={
           !localStorage.getItem("token") || likeLoading || unlikeLoading
         }

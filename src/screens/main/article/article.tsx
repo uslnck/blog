@@ -3,11 +3,15 @@ import UserInfo from "../user-info";
 import { IArticleProps } from "../../../types";
 import { Link } from "react-router-dom";
 import Like from "../../../components/like";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   useLikeArticleMutation,
   useUnlikeArticleMutation,
 } from "../../../store";
+import { selectProperFavoritedStatus } from "./utils";
+
+let isLikeClicked = false;
+const token = localStorage.getItem("token") as string;
 
 export default function Article({
   author,
@@ -23,30 +27,70 @@ export default function Article({
 }: IArticleProps) {
   const [articleLikesCount, setArticleLikesCount] = useState(favoritesCount);
   const [hasLiked, setHasLiked] = useState(false);
+  const [pseudoFavorited, setPseudoFavorited] = useState(false);
 
-  const [likeArticle, { isLoading: likeLoading }] = useLikeArticleMutation();
-  const [unlikeArticle, { isLoading: unlikeLoading }] =
+  const [likeArticle, { data: likeObject, isLoading: likeLoading }] =
+    useLikeArticleMutation();
+
+  const [unlikeArticle, { data: unlikeObject, isLoading: unlikeLoading }] =
     useUnlikeArticleMutation();
 
+  const isFirstRender = useRef(true);
+  const isLike = useRef(false);
+  const isUnlike = useRef(false);
+
   useEffect(() => {
-    setHasLiked(favorited);
-  }, [favorited]);
+    if (!isFirstRender.current) setPseudoFavorited(true);
+    isLike.current = true;
+  }, [likeObject]);
+
+  useEffect(() => {
+    if (!isFirstRender.current) setPseudoFavorited(false);
+    isUnlike.current = true;
+  }, [unlikeObject]);
+
+  useEffect(() => {
+    if (isLike.current && isUnlike.current) isFirstRender.current = false;
+  }, [likeObject, unlikeObject]);
 
   const handleLike = async () => {
+    isLikeClicked = true;
     if (hasLiked) {
-      setHasLiked(false);
-      setArticleLikesCount((prev) => prev - 1);
-      await unlikeArticle({
-        slug: slug,
-        token: localStorage.getItem("token") as string,
-      });
+      if (favorited) {
+        console.log("(повторное) при лайке в списке");
+        setHasLiked(false);
+        setArticleLikesCount((prev) => prev + 1);
+        await likeArticle({
+          slug: slug,
+          token: token,
+        });
+      } else {
+        console.log("(повторное) при анлайке в списке");
+        setHasLiked(false);
+        setArticleLikesCount((prev) => prev - 1);
+        await unlikeArticle({
+          slug: slug,
+          token: token,
+        });
+      }
     } else {
-      setHasLiked(true);
-      setArticleLikesCount((prev) => prev + 1);
-      await likeArticle({
-        slug: slug,
-        token: localStorage.getItem("token") as string,
-      });
+      if (favorited) {
+        console.log("при анлайке в списке");
+        setHasLiked(true);
+        setArticleLikesCount((prev) => prev - 1);
+        await unlikeArticle({
+          slug: slug,
+          token: token,
+        });
+      } else {
+        console.log("при лайке в списке");
+        setHasLiked(true);
+        setArticleLikesCount((prev) => prev + 1);
+        await likeArticle({
+          slug: slug,
+          token: token,
+        });
+      }
     }
   };
 
@@ -57,13 +101,18 @@ export default function Article({
           <Link
             to={`/articles/${slug}`}
             className={styles.articleTitle}
+            onClick={() => console.log("reload article list")}
             state={{
               author,
               body,
               createdAt,
               description,
-              favorited,
-              favoritesCount,
+              favorited: selectProperFavoritedStatus(
+                isLikeClicked,
+                favorited,
+                pseudoFavorited
+              ),
+              favoritesCount: articleLikesCount,
               slug,
               tagList,
               title,
@@ -74,10 +123,13 @@ export default function Article({
           </Link>
           <Like
             handleLike={handleLike}
-            hasLiked={hasLiked}
             likeLoading={likeLoading}
             unlikeLoading={unlikeLoading}
-            articleFavorited={favorited}
+            articleFavorited={selectProperFavoritedStatus(
+              isLikeClicked,
+              favorited,
+              pseudoFavorited
+            )}
             articleLikesCount={articleLikesCount}
           />
         </div>

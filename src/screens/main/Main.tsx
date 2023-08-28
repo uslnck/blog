@@ -9,9 +9,10 @@ import UserProfile from "./user-profile";
 import NewArticle from "./new-article";
 import NotFound from "./not-found";
 import styles from "./Main.module.less";
+import { useGetArticlesQuery } from "../../store";
 
 const pageSize = 5;
-const pagesCount = 5;
+const token = localStorage.getItem("token") as string;
 
 export default function Main() {
   const [currentOffset, setCurrentOffset] = useState(0);
@@ -21,6 +22,14 @@ export default function Main() {
     setCurrentPage(page);
     setCurrentOffset((page - 1) * pageSize);
   };
+
+  const {
+    data: articlesObject = { articles: [], articlesCount: 0 },
+    isFetching,
+  } = useGetArticlesQuery({ currentOffset, token });
+  const { articles, articlesCount } = articlesObject;
+
+  console.log(articles);
 
   return (
     <main>
@@ -32,12 +41,12 @@ export default function Main() {
               path={path}
               element={
                 <div className={styles.articleListPaginationContainer}>
-                  <ArticleList currentOffset={currentOffset} />
+                  <ArticleList articles={articles} isFetching={isFetching} />
                   <Pagination
                     showSizeChanger={false}
                     current={currentPage}
                     pageSize={pageSize}
-                    total={pageSize * pagesCount}
+                    total={articlesCount}
                     onChange={(page) => handlePageChange(page)}
                     style={{ marginBottom: "20px" }}
                   />

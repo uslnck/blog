@@ -6,14 +6,16 @@ import Markdown from "markdown-to-jsx";
 import {
   useDeleteArticleMutation,
   useGetArticleQuery,
-  useLikeArticleMutation,
-  useUnlikeArticleMutation,
+  useLikeArticleInsideMutation,
+  useUnlikeArticleInsideMutation,
 } from "../../../store";
 import { getSlug } from "./utils";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Spin } from "antd";
 import BorderedButton from "../../../components/bordered-button";
 import Like from "../../../components/like";
+
+const token = localStorage.getItem("token") as string;
 
 export default function ArticleInside() {
   const navigate = useNavigate();
@@ -34,7 +36,6 @@ export default function ArticleInside() {
 
   const [slugInState, setSlugInState] = useState(slug || "");
   const [skip, setSkip] = useState(true);
-  const [hasLiked, setHasLiked] = useState(false);
 
   useEffect(() => {
     if (!state) {
@@ -44,14 +45,13 @@ export default function ArticleInside() {
   }, [state]);
 
   const { data: articleObject = { article: {} }, isFetching } =
-    useGetArticleQuery(slugInState, {
-      skip,
-    });
+    useGetArticleQuery(
+      { slug: slugInState, token },
+      {
+        skip,
+      }
+    );
   const { article } = articleObject as IArticleResponse;
-
-  const [articleLikesCount, setArticleLikesCount] = useState(
-    favoritesCount ?? article?.favoritesCount
-  );
 
   const articleAuthor = author || article?.author;
   const articleCreatedAt = createdAt || article?.createdAt;
@@ -63,47 +63,92 @@ export default function ArticleInside() {
     tagList: tagList || article?.tagList,
   };
   const articleFavorited = favorited ?? article?.favorited;
+  const articleLikesCount = favoritesCount ?? article?.favoritesCount;
 
   const [deleteArticle] = useDeleteArticleMutation();
 
   const handleDeleteArticle = async () => {
     if (window.confirm("Are you sure you want to delete this article?")) {
       await deleteArticle({
-        slug: slug || article.slug,
-        token: localStorage.getItem("token") as string,
+        slug: slug || article?.slug,
+        token: token,
       });
       navigate("/");
-      navigate(0);
     }
   };
 
-  const [likeArticle, { isLoading: likeLoading }] = useLikeArticleMutation();
-  const [unlikeArticle, { isLoading: unlikeLoading }] =
-    useUnlikeArticleMutation();
+  const [likeArticle, { data: likeObject, isLoading: likeLoading }] =
+    useLikeArticleInsideMutation();
+
+  const [unlikeArticle, { data: unlikeObject, isLoading: unlikeLoading }] =
+    useUnlikeArticleInsideMutation();
+
+  const [articleFavoritedInside, setArticleFavoritedInside] =
+    useState(articleFavorited);
+  const [hasLikedInside, setHasLikedInside] = useState(false);
+  const [articleLikesInside, setArticleLikesInside] = useState(Number);
 
   useEffect(() => {
-    setHasLiked(articleFavorited);
-  }, [articleFavorited]);
+    setArticleLikesInside(articleLikesCount);
+  }, [articleLikesCount]);
 
-  const handleLike = async () => {
-    if (hasLiked) {
-      setHasLiked(false);
-      setArticleLikesCount((prev) => prev - 1);
-      await unlikeArticle({
-        slug: slug || article.slug,
-        token: localStorage.getItem("token") as string,
-      });
+  const isFirstRender = useRef(true);
+  const isLike = useRef(false);
+  const isUnlike = useRef(false);
+
+  useEffect(() => {
+    if (!isFirstRender.current) setArticleFavoritedInside(true);
+    isLike.current = true;
+  }, [likeObject]);
+
+  useEffect(() => {
+    if (!isFirstRender.current) setArticleFavoritedInside(false);
+    isUnlike.current = true;
+  }, [unlikeObject]);
+
+  useEffect(() => {
+    if (isLike.current && isUnlike.current) isFirstRender.current = false;
+  }, [likeObject, unlikeObject]);
+
+  const handleLikeInside = async () => {
+    if (hasLikedInside) {
+      if (articleFavorited) {
+        console.log("(повторное) при лайке внутри");
+        setHasLikedInside(false);
+        setArticleLikesInside((prev) => prev + 1);
+        await likeArticle({
+          slug: slugInState,
+          token: token,
+        });
+      } else {
+        console.log("(повторное) при анлайке внутри");
+        setHasLikedInside(false);
+        setArticleLikesInside((prev) => prev - 1);
+        await unlikeArticle({
+          slug: slugInState,
+          token: token,
+        });
+      }
     } else {
-      setHasLiked(true);
-      setArticleLikesCount((prev) => prev + 1);
-      await likeArticle({
-        slug: slug || article.slug,
-        token: localStorage.getItem("token") as string,
-      });
+      if (articleFavorited) {
+        console.log("при анлайке внутри");
+        setHasLikedInside(true);
+        setArticleLikesInside((prev) => prev - 1);
+        await unlikeArticle({
+          slug: slugInState,
+          token: token,
+        });
+      } else {
+        console.log("при лайке внутри");
+        setHasLikedInside(true);
+        setArticleLikesInside((prev) => prev + 1);
+        await likeArticle({
+          slug: slugInState,
+          token: token,
+        });
+      }
     }
   };
-
-  console.log("hasLiked:", hasLiked, "articleFavorited:", articleFavorited);
 
   return isFetching ? (
     <Spin size="large" />
@@ -116,12 +161,11 @@ export default function ArticleInside() {
               {title || article?.title}
             </h5>
             <Like
-              handleLike={handleLike}
-              hasLiked={hasLiked}
+              handleLike={handleLikeInside}
               likeLoading={likeLoading}
               unlikeLoading={unlikeLoading}
-              articleFavorited={articleFavorited}
-              articleLikesCount={articleLikesCount}
+              articleFavorited={articleFavoritedInside ?? article?.favorited}
+              articleLikesCount={articleLikesInside ?? article?.favoritesCount}
             />
           </div>
           <ul className={styles.tagInsideContainer}>

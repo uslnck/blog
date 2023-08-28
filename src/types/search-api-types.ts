@@ -2,6 +2,27 @@ import { IArticleProps } from ".";
 
 export interface IGetArticlesResponse {
   articles: IArticleProps[];
+  articlesCount: number;
+}
+
+export interface IGetArticlesData {
+  currentOffset: number;
+  token: string;
+}
+
+export interface IGetArticleData {
+  slug: string;
+  token: string;
+}
+
+export interface ILikeArticleData {
+  slug: string;
+  token: string;
+}
+
+export interface IUnlikeArticleData {
+  slug: string;
+  token: string;
 }
 
 export interface ILoginData {

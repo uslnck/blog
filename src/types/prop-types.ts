@@ -71,12 +71,12 @@ export interface IBorderedButtonProps {
 }
 
 export interface IArticleListProps {
-  currentOffset: number;
+  articles: IArticleProps[];
+  isFetching: boolean;
 }
 
 export interface ILikeProps {
   handleLike: () => Promise<void>;
-  hasLiked: boolean;
   likeLoading: boolean;
   unlikeLoading: boolean;
   articleFavorited: boolean;

@@ -5,7 +5,7 @@ export const inputsProperties = [
     id: "username",
     type: "text",
     autoComplete: "on",
-    rhfPatternValue: /^[a-z0-9]{3,15}$/,
+    rhfPatternValue: /^[a-zA-Z0-9]{3,15}$/,
     rhfPatternMessage: "3–15 latin characters or numbers required (no symbols)",
     inputStyle: "user",
   },
