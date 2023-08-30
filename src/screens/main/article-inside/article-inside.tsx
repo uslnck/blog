@@ -83,14 +83,17 @@ export default function ArticleInside() {
   const [unlikeArticle, { data: unlikeObject, isLoading: unlikeLoading }] =
     useUnlikeArticleInsideMutation();
 
-  const [articleFavoritedInside, setArticleFavoritedInside] =
-    useState(articleFavorited);
   const [hasLikedInside, setHasLikedInside] = useState(false);
-  const [articleLikesInside, setArticleLikesInside] = useState(Number);
+  const [, setPseudoFavorited] = useState(favorited);
+  const [, setArticleFavoritedInside] = useState(articleFavorited);
+  const [, setArticleLikesInside] = useState(Number);
 
   useEffect(() => {
     setArticleLikesInside(articleLikesCount);
   }, [articleLikesCount]);
+  // useEffect(() => {
+  //   setPseudoFavorited(pseudoFavorited);
+  // }, [pseudoFavorited]);
 
   const isFirstRender = useRef(true);
   const isLike = useRef(false);
@@ -113,17 +116,21 @@ export default function ArticleInside() {
   const handleLikeInside = async () => {
     if (hasLikedInside) {
       if (articleFavorited) {
-        console.log("(повторное) при лайке внутри");
+        console.log("(повторно) при лайке внутри");
         setHasLikedInside(false);
         setArticleLikesInside((prev) => prev + 1);
+        setPseudoFavorited(true);
+
         await likeArticle({
           slug: slugInState,
           token: token,
         });
       } else {
-        console.log("(повторное) при анлайке внутри");
+        console.log("(повторно) при анлайке внутри");
         setHasLikedInside(false);
         setArticleLikesInside((prev) => prev - 1);
+        setPseudoFavorited(false);
+
         await unlikeArticle({
           slug: slugInState,
           token: token,
@@ -134,6 +141,8 @@ export default function ArticleInside() {
         console.log("при анлайке внутри");
         setHasLikedInside(true);
         setArticleLikesInside((prev) => prev - 1);
+        setPseudoFavorited(false);
+
         await unlikeArticle({
           slug: slugInState,
           token: token,
@@ -142,6 +151,8 @@ export default function ArticleInside() {
         console.log("при лайке внутри");
         setHasLikedInside(true);
         setArticleLikesInside((prev) => prev + 1);
+        setPseudoFavorited(true);
+
         await likeArticle({
           slug: slugInState,
           token: token,
@@ -160,12 +171,19 @@ export default function ArticleInside() {
             <h5 className={styles.articleInsideTitle}>
               {title || article?.title}
             </h5>
+            {/* <Like
+              handleLike={handleLikeInside}
+              likeLoading={likeLoading}
+              unlikeLoading={unlikeLoading}
+              articleFavorited={state ? pseudoFavorited : article?.favorited}
+              articleFavoritesCount={articleLikesInside}
+            /> */}
             <Like
               handleLike={handleLikeInside}
               likeLoading={likeLoading}
               unlikeLoading={unlikeLoading}
-              articleFavorited={articleFavoritedInside ?? article?.favorited}
-              articleLikesCount={articleLikesInside ?? article?.favoritesCount}
+              articleFavorited={articleFavorited}
+              articleFavoritesCount={articleLikesCount}
             />
           </div>
           <ul className={styles.tagInsideContainer}>

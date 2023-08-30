@@ -10,6 +10,7 @@ import NewArticle from "./new-article";
 import NotFound from "./not-found";
 import styles from "./Main.module.less";
 import { useGetArticlesQuery } from "../../store";
+// import ArticleOutlet from "./ArticleOutlet";
 
 const pageSize = 5;
 const token = localStorage.getItem("token") as string;
@@ -18,9 +19,13 @@ export default function Main() {
   const [currentOffset, setCurrentOffset] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
 
+  // const [pseudo] = usePseudoMutationMutation();
+
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
     setCurrentOffset((page - 1) * pageSize);
+
+    // await pseudo({});
   };
 
   const {
@@ -35,6 +40,7 @@ export default function Main() {
     <main>
       <div className={styles.mainContainer}>
         <Routes>
+          {/* <Route element={<ArticleOutlet articles={articles} />}> */}
           {["/", "/articles"].map((path, i) => (
             <Route
               key={i}
@@ -54,6 +60,7 @@ export default function Main() {
               }
             />
           ))}
+          {/* </Route> */}
           <Route path="/articles/:slug" element={<ArticleInside />} />
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/sign-up" element={<SignUp />} />

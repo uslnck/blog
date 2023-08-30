@@ -80,7 +80,7 @@ export interface ILikeProps {
   likeLoading: boolean;
   unlikeLoading: boolean;
   articleFavorited: boolean;
-  articleLikesCount: number;
+  articleFavoritesCount: number;
 }
 
 export interface IArticleProps {
@@ -99,4 +99,9 @@ export interface IArticleProps {
     image: string;
     following: boolean;
   };
+  id: number;
+}
+
+export interface IArticleOutletProps {
+  articles: IArticleProps[];
 }

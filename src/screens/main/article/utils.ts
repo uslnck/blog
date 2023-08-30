@@ -10,3 +10,16 @@ export const selectProperFavoritedStatus = (
 
   return status;
 };
+
+export const selectProperFavoritesCount = (
+  isLikeClicked: boolean,
+  favoritesCount: number,
+  favoritesPseudoCount: number
+) => {
+  let count: number;
+
+  if (isLikeClicked) count = favoritesPseudoCount;
+  else count = favoritesCount;
+
+  return count;
+};

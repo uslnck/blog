@@ -6,11 +6,16 @@ import Like from "../../../components/like";
 import { useEffect, useRef, useState } from "react";
 import {
   useLikeArticleMutation,
+  // usePseudoMutationMutation,
   useUnlikeArticleMutation,
 } from "../../../store";
-import { selectProperFavoritedStatus } from "./utils";
+import {
+  selectProperFavoritedStatus,
+  // selectProperFavoritesCount,
+} from "./utils";
 
 let isLikeClicked = false;
+// let isArticleClicked = false;
 const token = localStorage.getItem("token") as string;
 
 export default function Article({
@@ -25,9 +30,29 @@ export default function Article({
   title,
   updatedAt,
 }: IArticleProps) {
-  const [articleLikesCount, setArticleLikesCount] = useState(favoritesCount);
+  const [pseudoFavoritesCount, setPseudoFavoritesCount] =
+    useState(favoritesCount);
+  const [pseudoFavorited, setPseudoFavorited] = useState(favorited);
   const [hasLiked, setHasLiked] = useState(false);
-  const [pseudoFavorited, setPseudoFavorited] = useState(false);
+
+  // const [handleLike2, handleUnlike2, isFavorited, favoritesCount2, trash] =
+  //   useOutletContext();
+  // console.log(favoritesCount2);
+  // console.log(trash);
+
+  // const [pseudoFavoritesCountInside, setPseudoFavoritesCountInside] =
+  //   useState(favoritesCount);
+  // const [pseudoFavoritedInside, setPseudoFavoritedInside] = useState(favorited);
+  // const [hasLikedInside, setHasLikedInside] = useState(false);
+
+  // console.log(
+  //   "pseudoFavoritesCount",
+  //   pseudoFavoritesCount,
+  //   "pseudoFavorited",
+  //   pseudoFavorited
+  // );
+
+  // const likesRef = useRef(favoritesCount);
 
   const [likeArticle, { data: likeObject, isLoading: likeLoading }] =
     useLikeArticleMutation();
@@ -57,17 +82,21 @@ export default function Article({
     isLikeClicked = true;
     if (hasLiked) {
       if (favorited) {
-        console.log("(повторное) при лайке в списке");
+        console.log("(повторно) при лайке в списке");
         setHasLiked(false);
-        setArticleLikesCount((prev) => prev + 1);
+        setPseudoFavoritesCount((prev) => prev + 1);
+        setPseudoFavorited(true);
+
         await likeArticle({
           slug: slug,
           token: token,
         });
       } else {
-        console.log("(повторное) при анлайке в списке");
+        console.log("(повторно) при анлайке в списке");
         setHasLiked(false);
-        setArticleLikesCount((prev) => prev - 1);
+        setPseudoFavoritesCount((prev) => prev - 1);
+        setPseudoFavorited(false);
+
         await unlikeArticle({
           slug: slug,
           token: token,
@@ -77,7 +106,9 @@ export default function Article({
       if (favorited) {
         console.log("при анлайке в списке");
         setHasLiked(true);
-        setArticleLikesCount((prev) => prev - 1);
+        setPseudoFavoritesCount((prev) => prev - 1);
+        setPseudoFavorited(false);
+
         await unlikeArticle({
           slug: slug,
           token: token,
@@ -85,7 +116,9 @@ export default function Article({
       } else {
         console.log("при лайке в списке");
         setHasLiked(true);
-        setArticleLikesCount((prev) => prev + 1);
+        setPseudoFavoritesCount((prev) => prev + 1);
+        setPseudoFavorited(true);
+
         await likeArticle({
           slug: slug,
           token: token,
@@ -94,6 +127,13 @@ export default function Article({
     }
   };
 
+  // const clicked = (pseudoFavorited, articleLikesInside) => {
+  //   setPseudoFavorited(pseudoFavorited);
+  //   setPseudoFavoritesCount(articleLikesInside);
+  // };
+
+  // const [pseudo] = usePseudoMutationMutation();
+
   return (
     <li className={styles.article}>
       <div className={styles.textContainer}>
@@ -101,7 +141,7 @@ export default function Article({
           <Link
             to={`/articles/${slug}`}
             className={styles.articleTitle}
-            onClick={() => console.log("reload article list")}
+            // onClick={clicked}
             state={{
               author,
               body,
@@ -112,7 +152,7 @@ export default function Article({
                 favorited,
                 pseudoFavorited
               ),
-              favoritesCount: articleLikesCount,
+              favoritesCount: pseudoFavoritesCount,
               slug,
               tagList,
               title,
@@ -125,13 +165,31 @@ export default function Article({
             handleLike={handleLike}
             likeLoading={likeLoading}
             unlikeLoading={unlikeLoading}
+            articleFavorited={favorited}
+            articleFavoritesCount={favoritesCount}
+          />
+          {/* <Like
+            handleLike={handleLike}
+            likeLoading={likeLoading}
+            unlikeLoading={unlikeLoading}
             articleFavorited={selectProperFavoritedStatus(
               isLikeClicked,
               favorited,
               pseudoFavorited
             )}
-            articleLikesCount={articleLikesCount}
-          />
+            articleFavoritesCount={selectProperFavoritesCount(
+              isLikeClicked,
+              favoritesCount,
+              pseudoFavoritesCount
+            )}
+          /> */}
+          {/* <Like
+            handleLike={() => handleLike2(id)}
+            likeLoading={likeLoading}
+            unlikeLoading={unlikeLoading}
+            articleFavorited={isFavorited[id + trash]}
+            articleFavoritesCount={favoritesCount2[id + trash]}
+          /> */}
         </div>
         <ul className={styles.tagContainer}>
           {tagList.map((tag, i) => (

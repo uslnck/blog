@@ -20,7 +20,9 @@ export default function ArticleList({
             }}
           />
         ) : (
-          articles.map((article, i) => <Article key={i} {...article} />)
+          articles.map((article, i) => (
+            <Article key={i} {...article} /*id={i}*/ />
+          ))
         )}
       </ul>
     </>
