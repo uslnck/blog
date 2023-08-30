@@ -1,3 +1,3 @@
-import ArticleOutlet from "./ArticleOutlet";
+// import ArticleOutlet from "./ArticleOutlet";
 
-export default ArticleOutlet;
+// export default ArticleOutlet;
