@@ -67,7 +67,7 @@ export const searchApi = createApi({
           ? [
               result.articles.map(({ slug }) => ({
                 type: "Article",
-                slug,
+                id: slug,
               })),
               { type: "Article", id: "LIST" },
             ]
@@ -132,8 +132,8 @@ export const searchApi = createApi({
           },
         };
       },
-      providesTags: ["Article"],
-      // providesTags: (_, __, arg) => [{ type: "Article", id: arg.slug }],
+      // providesTags: ["Article"],
+      providesTags: (_, __, arg) => [{ type: "Article", id: arg.slug }],
     }),
     editArticle: build.mutation<IArticleResponse, IEditArticleData>({
       query: ({ formData, token, slug }) => ({
@@ -145,7 +145,7 @@ export const searchApi = createApi({
         },
         body: { article: formData },
       }),
-      invalidatesTags: ["Article"],
+      // invalidatesTags: ["Article"],
       // invalidatesTags: (_, __, arg) => [{ type: "Article", id: arg.slug }],
     }),
     deleteArticle: build.mutation<IDeleteArticleResponse, IDeleteArticleData>({
@@ -166,34 +166,32 @@ export const searchApi = createApi({
           Authorization: `Token ${token}`,
         },
       }),
-      async onQueryStarted({ slug }, { dispatch, queryFulfilled }) {
-        const patchResult = dispatch(
-          searchApi.util.updateQueryData(
-            "getArticles",
-            {} as IGetArticlesData,
-            (draft) => {
-              draft.articles = draft.articles.map((article) => {
-                console.log("slug", slug);
+      // async onQueryStarted({ slug }, { dispatch, queryFulfilled }) {
+      //   const patchResult = dispatch(
+      //     searchApi.util.updateQueryData(
+      //       "getArticles",
+      //       {} as IGetArticlesData,
+      //       (draft) => {
+      //         draft.articles = draft.articles.map((article) => {
+      //           console.log("slug", slug);
 
-                if (article.slug === slug) {
-                  article.favoritesCount += 1;
-                  article.favorited = true;
-                }
-                return article;
-              });
-            }
-          )
-        );
-        try {
-          await queryFulfilled;
-        } catch {
-          patchResult.undo();
-          // dispatch(searchApi.util.invalidateTags(["Article"]));
-        }
-      },
-      // invalidatesTags: (result, error, arg) => [
-      //   { type: "Article", id: arg.slug },
-      // ],
+      //           if (article.slug === slug) {
+      //             article.favoritesCount += 1;
+      //             article.favorited = true;
+      //           }
+      //           return article;
+      //         });
+      //       }
+      //     )
+      //   );
+      //   try {
+      //     await queryFulfilled;
+      //   } catch {
+      //     patchResult.undo();
+      //     // dispatch(searchApi.util.invalidateTags(["Article"]));
+      //   }
+      // },
+      // invalidatesTags: (_, __, arg) => [{ type: "Article", id: arg.slug }],
     }),
     likeArticleInside: build.mutation<IArticleResponse, ILikeArticleData>({
       query: ({ slug, token }) => ({
@@ -213,7 +211,7 @@ export const searchApi = createApi({
           Authorization: `Token ${token}`,
         },
       }),
-      // invalidatesTags: ["Article"],
+      // invalidatesTags: (_, __, arg) => [{ type: "Article", id: arg.slug }],
     }),
     unlikeArticleInside: build.mutation<IArticleResponse, IUnlikeArticleData>({
       query: ({ slug, token }) => ({

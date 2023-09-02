@@ -1,5 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-nocheck
 import { useEffect, useState } from "react";
 import "./App.less";
 import Header from "./components/header";
@@ -16,7 +14,10 @@ export default function Blog() {
 
   const handlePseudoInside = (slug: string) => {
     const target = isInside.indexOf(
-      isInside.find((article) => article.slug === slug)
+      isInside.find((article) => article.slug === slug) || {
+        slug: "",
+        inside: false,
+      }
     );
 
     setIsInside((prev) => {
@@ -50,7 +51,7 @@ export default function Blog() {
     }
   }, [articles]);
 
-  console.log("isInside", isInside);
+  // console.log("isInside", isInside);
   console.log("articles", articles);
 
   return (

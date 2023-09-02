@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-nocheck
 import styles from "./article.module.less";
@@ -48,6 +49,25 @@ export default function Article({
 
   const [unlikeArticle, { isLoading: unlikeLoading }] =
     useUnlikeArticleMutation();
+
+  useEffect(() => {
+    if (!isLikeClicked) {
+      setPseudoFavorited(favorited);
+      setPseudoFavoritesCount(favoritesCount);
+    }
+  }, [
+    author,
+    body,
+    createdAt,
+    description,
+    favorited,
+    favoritesCount,
+    slug,
+    tagList,
+    title,
+    handlePseudoInside,
+    isRenderSingleArticle,
+  ]);
 
   const handleLike = async () => {
     isLikeClicked = true;
@@ -145,6 +165,13 @@ export default function Article({
                   pseudoFavoritesCount
                 )}
               />
+              {/* <Like
+                handleLike={handleLike}
+                likeLoading={likeLoading}
+                unlikeLoading={unlikeLoading}
+                articleFavorited={favorited}
+                articleFavoritesCount={favoritesCount}
+              /> */}
             </div>
             <ul className={styles.tagInsideContainer}>
               {(tagList || []).map((tag, i) => (

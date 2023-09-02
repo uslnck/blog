@@ -49,6 +49,7 @@ export default function Main({
                     isInside={isInside}
                     articles={articles}
                     isFetching={isFetching}
+                    isRenderSingleArticle={isRenderSingleArticle}
                   />
                   {isRenderSingleArticle ? null : (
                     <Pagination

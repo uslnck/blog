@@ -13,21 +13,13 @@ export default function ArticleList({
   isFetching,
   isInside,
   handlePseudoInside,
+  isRenderSingleArticle,
 }: IArticleListProps) {
   const target = articles.findIndex((article) => {
     const matchingFirstArrayItem = isInside.find(
       (item) => item.slug === article.slug
     );
     return matchingFirstArrayItem && matchingFirstArrayItem.inside === true;
-  });
-
-  let isRenderSingleArticle = false;
-  isInside.forEach((item) => {
-    if (item.inside) {
-      isRenderSingleArticle = true;
-      return;
-    }
-    return isRenderSingleArticle;
   });
 
   return (
@@ -42,21 +34,19 @@ export default function ArticleList({
               transform: "translate(0, 50%)",
             }}
           />
-        ) : isRenderSingleArticle ? (
-          <Article
-            {...articles[target]}
-            handlePseudoInside={handlePseudoInside}
-            isRenderSingleArticle={isRenderSingleArticle}
-          />
         ) : (
-          articles.map((article, i) => (
-            <Article
-              key={i}
-              {...article}
-              isInside={isInside}
-              handlePseudoInside={handlePseudoInside}
-            />
-          ))
+          articles.map((article, i) =>
+            isRenderSingleArticle && i > 0 ? null : (
+              <Article
+                key={i}
+                {...(isRenderSingleArticle
+                  ? { ...articles[target] }
+                  : { ...article })}
+                handlePseudoInside={handlePseudoInside}
+                isRenderSingleArticle={isRenderSingleArticle}
+              />
+            )
+          )
         )}
       </ul>
     </>
