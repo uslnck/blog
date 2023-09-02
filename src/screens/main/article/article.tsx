@@ -50,25 +50,6 @@ export default function Article({
   const [unlikeArticle, { isLoading: unlikeLoading }] =
     useUnlikeArticleMutation();
 
-  useEffect(() => {
-    if (!isLikeClicked) {
-      setPseudoFavorited(favorited);
-      setPseudoFavoritesCount(favoritesCount);
-    }
-  }, [
-    author,
-    body,
-    createdAt,
-    description,
-    favorited,
-    favoritesCount,
-    slug,
-    tagList,
-    title,
-    handlePseudoInside,
-    isRenderSingleArticle,
-  ]);
-
   const handleLike = async () => {
     isLikeClicked = true;
     if (hasLiked) {
