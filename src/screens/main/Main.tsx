@@ -46,11 +46,17 @@ export default function Main({
               element={
                 <div className={styles.articleListPaginationContainer}>
                   <ArticleList
-                    handlePseudoInside={handlePseudoInside}
                     articles={articles}
                     isFetching={isFetching}
-                    isRenderSingleArticle={isRenderSingleArticle}
-                    target={target}
+                    currentOffset={currentOffset}
+                  />
+                  <Pagination
+                    showSizeChanger={false}
+                    current={currentPage}
+                    pageSize={pageSize}
+                    total={articlesCount}
+                    onChange={(page) => handlePageChange(page)}
+                    style={{ marginBottom: "20px" }}
                   />
                   {isRenderSingleArticle ? null : (
                     <Pagination

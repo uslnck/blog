@@ -11,9 +11,7 @@ import { IArticleListProps } from "../../../types";
 export default function ArticleList({
   articles,
   isFetching,
-  handlePseudoInside,
-  isRenderSingleArticle,
-  target,
+  currentOffset,
 }: IArticleListProps) {
   return (
     <>
@@ -28,18 +26,9 @@ export default function ArticleList({
             }}
           />
         ) : (
-          articles.map((article, i) =>
-            isRenderSingleArticle && i > 0 ? null : (
-              <Article
-                key={article.slug}
-                {...(isRenderSingleArticle
-                  ? { ...articles[target] }
-                  : { ...article })}
-                handlePseudoInside={handlePseudoInside}
-                isRenderSingleArticle={isRenderSingleArticle}
-              />
-            )
-          )
+          articles.map((article, i) => (
+            <Article key={i} {...article} currentOffset={currentOffset} />
+          ))
         )}
       </ul>
     </>

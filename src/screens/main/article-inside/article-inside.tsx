@@ -10,12 +10,10 @@ import {
   useUnlikeArticleInsideMutation,
 } from "../../../store";
 import { getSlug } from "./utils";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Spin } from "antd";
 import BorderedButton from "../../../components/bordered-button";
 import Like from "../../../components/like";
-
-const token = localStorage.getItem("token") as string;
 
 export default function ArticleInside() {
   const navigate = useNavigate();
@@ -32,6 +30,8 @@ export default function ArticleInside() {
     tagList,
     title,
     favorited,
+    currentOffset,
+    token,
   } = state || {};
 
   const [slugInState, setSlugInState] = useState(slug || "");
@@ -39,7 +39,7 @@ export default function ArticleInside() {
 
   useEffect(() => {
     if (!state) {
-      setSlugInState(getSlug() as string);
+      setSlugInState(getSlug());
       setSkip(false);
     }
   }, [state]);
@@ -77,85 +77,47 @@ export default function ArticleInside() {
     }
   };
 
-  const [likeArticle, { data: likeObject, isLoading: likeLoading }] =
+  const [likeArticle, { isLoading: likeLoading }] =
     useLikeArticleInsideMutation();
-
-  const [unlikeArticle, { data: unlikeObject, isLoading: unlikeLoading }] =
+  const [unlikeArticle, { isLoading: unlikeLoading }] =
     useUnlikeArticleInsideMutation();
 
   const [hasLikedInside, setHasLikedInside] = useState(false);
-  const [, setPseudoFavorited] = useState(favorited);
-  const [, setArticleFavoritedInside] = useState(articleFavorited);
-  const [, setArticleLikesInside] = useState(Number);
-
-  useEffect(() => {
-    setArticleLikesInside(articleLikesCount);
-  }, [articleLikesCount]);
-  // useEffect(() => {
-  //   setPseudoFavorited(pseudoFavorited);
-  // }, [pseudoFavorited]);
-
-  const isFirstRender = useRef(true);
-  const isLike = useRef(false);
-  const isUnlike = useRef(false);
-
-  useEffect(() => {
-    if (!isFirstRender.current) setArticleFavoritedInside(true);
-    isLike.current = true;
-  }, [likeObject]);
-
-  useEffect(() => {
-    if (!isFirstRender.current) setArticleFavoritedInside(false);
-    isUnlike.current = true;
-  }, [unlikeObject]);
-
-  useEffect(() => {
-    if (isLike.current && isUnlike.current) isFirstRender.current = false;
-  }, [likeObject, unlikeObject]);
-
   const handleLikeInside = async () => {
     if (hasLikedInside) {
-      if (articleFavorited) {
-        console.log("(повторно) при лайке внутри");
+      if (!articleFavorited) {
+        console.log("(повторное) при лайке внутри");
         setHasLikedInside(false);
-        setArticleLikesInside((prev) => prev + 1);
-        setPseudoFavorited(true);
-
         await likeArticle({
           slug: slugInState,
           token: token,
+          currentOffset: currentOffset,
         });
       } else {
         console.log("(повторно) при анлайке внутри");
         setHasLikedInside(false);
-        setArticleLikesInside((prev) => prev - 1);
-        setPseudoFavorited(false);
-
         await unlikeArticle({
           slug: slugInState,
           token: token,
+          currentOffset: currentOffset,
         });
       }
     } else {
       if (articleFavorited) {
         console.log("при анлайке внутри");
         setHasLikedInside(true);
-        setArticleLikesInside((prev) => prev - 1);
-        setPseudoFavorited(false);
-
         await unlikeArticle({
           slug: slugInState,
           token: token,
+          currentOffset: currentOffset,
         });
       } else {
         console.log("при лайке внутри");
         setHasLikedInside(true);
-        setArticleLikesInside((prev) => prev + 1);
-        setPseudoFavorited(true);
-
         await likeArticle({
           slug: slugInState,
           token: token,
+          currentOffset: currentOffset,
         });
       }
     }
@@ -180,10 +142,9 @@ export default function ArticleInside() {
             /> */}
             <Like
               handleLike={handleLikeInside}
-              likeLoading={likeLoading}
-              unlikeLoading={unlikeLoading}
+              isLoading={unlikeLoading || likeLoading}
               articleFavorited={articleFavorited}
-              articleFavoritesCount={articleLikesCount}
+              articleLikesCount={articleLikesCount}
             />
           </div>
           <ul className={styles.tagInsideContainer}>

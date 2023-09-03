@@ -166,32 +166,34 @@ export const searchApi = createApi({
           Authorization: `Token ${token}`,
         },
       }),
-      // async onQueryStarted({ slug }, { dispatch, queryFulfilled }) {
-      //   const patchResult = dispatch(
-      //     searchApi.util.updateQueryData(
-      //       "getArticles",
-      //       {} as IGetArticlesData,
-      //       (draft) => {
-      //         draft.articles = draft.articles.map((article) => {
-      //           console.log("slug", slug);
-
-      //           if (article.slug === slug) {
-      //             article.favoritesCount += 1;
-      //             article.favorited = true;
-      //           }
-      //           return article;
-      //         });
-      //       }
-      //     )
-      //   );
-      //   try {
-      //     await queryFulfilled;
-      //   } catch {
-      //     patchResult.undo();
-      //     // dispatch(searchApi.util.invalidateTags(["Article"]));
-      //   }
-      // },
-      // invalidatesTags: (_, __, arg) => [{ type: "Article", id: arg.slug }],
+      async onQueryStarted(
+        { slug, token, currentOffset },
+        { dispatch, queryFulfilled }
+      ) {
+        const patchResult = dispatch(
+          searchApi.util.updateQueryData(
+            "getArticles",
+            {
+              currentOffset: currentOffset,
+              token: token,
+            },
+            (draft) => {
+              draft.articles = draft.articles.map((article) => {
+                if (article.slug === slug) {
+                  article.favoritesCount += 1;
+                  article.favorited = true;
+                }
+                return article;
+              });
+            }
+          )
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
     }),
     likeArticleInside: build.mutation<IArticleResponse, ILikeArticleData>({
       query: ({ slug, token }) => ({
@@ -201,7 +203,31 @@ export const searchApi = createApi({
           Authorization: `Token ${token}`,
         },
       }),
-      // invalidatesTags: ["Article"],
+      async onQueryStarted({ slug, token }, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          searchApi.util.updateQueryData(
+            "getArticles",
+            {
+              currentOffset: 0,
+              token: token,
+            },
+            (draft) => {
+              draft.articles = draft.articles.map((article) => {
+                if (article.slug === slug) {
+                  article.favoritesCount += 1;
+                  article.favorited = true;
+                }
+                return article;
+              });
+            }
+          )
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
     }),
     unlikeArticle: build.mutation<IArticleResponse, IUnlikeArticleData>({
       query: ({ slug, token }) => ({
@@ -211,7 +237,34 @@ export const searchApi = createApi({
           Authorization: `Token ${token}`,
         },
       }),
-      // invalidatesTags: (_, __, arg) => [{ type: "Article", id: arg.slug }],
+      async onQueryStarted(
+        { slug, token, currentOffset },
+        { dispatch, queryFulfilled }
+      ) {
+        const patchResult = dispatch(
+          searchApi.util.updateQueryData(
+            "getArticles",
+            {
+              currentOffset: currentOffset,
+              token: token,
+            },
+            (draft) => {
+              draft.articles = draft.articles.map((article) => {
+                if (article.slug === slug) {
+                  article.favoritesCount -= 1;
+                  article.favorited = false;
+                }
+                return article;
+              });
+            }
+          )
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
     }),
     unlikeArticleInside: build.mutation<IArticleResponse, IUnlikeArticleData>({
       query: ({ slug, token }) => ({
@@ -221,11 +274,31 @@ export const searchApi = createApi({
           Authorization: `Token ${token}`,
         },
       }),
-      // invalidatesTags: ["Article"],
-    }),
-    pseudoMutation: build.mutation({
-      query: () => `/user`,
-      invalidatesTags: ["Article"],
+      async onQueryStarted({ slug, token }, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          searchApi.util.updateQueryData(
+            "getArticles",
+            {
+              currentOffset: 0,
+              token: token,
+            },
+            (draft) => {
+              draft.articles = draft.articles.map((article) => {
+                if (article.slug === slug) {
+                  article.favoritesCount -= 1;
+                  article.favorited = false;
+                }
+                return article;
+              });
+            }
+          )
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
     }),
   }),
 });
