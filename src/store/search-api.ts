@@ -59,19 +59,19 @@ export const searchApi = createApi({
           "Content-Type": "application/json",
         },
       }),
-
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      providesTags: (result) =>
-        result
-          ? [
-              result.articles.map(({ slug }) => ({
-                type: "Article",
-                id: slug,
-              })),
-              { type: "Article", id: "LIST" },
-            ]
-          : [{ type: "Article", id: "LIST" }],
+
+      // providesTags: (result) =>
+      //   result
+      //     ? [
+      //         result.articles.map(({ slug }) => ({
+      //           type: "Article",
+      //           id: slug,
+      //         })),
+      //         { type: "Article", id: "LIST" },
+      //       ]
+      //     : [{ type: "Article", id: "LIST" }],
     }),
     createUser: build.mutation<ISignResponse, IFormData>({
       query: (formData) => ({
@@ -133,7 +133,7 @@ export const searchApi = createApi({
         };
       },
       // providesTags: ["Article"],
-      providesTags: (_, __, arg) => [{ type: "Article", id: arg.slug }],
+      // providesTags: (_, __, arg) => [{ type: "Article", id: arg.slug }],
     }),
     editArticle: build.mutation<IArticleResponse, IEditArticleData>({
       query: ({ formData, token, slug }) => ({
@@ -145,8 +145,7 @@ export const searchApi = createApi({
         },
         body: { article: formData },
       }),
-      // invalidatesTags: ["Article"],
-      // invalidatesTags: (_, __, arg) => [{ type: "Article", id: arg.slug }],
+      invalidatesTags: ["Article"],
     }),
     deleteArticle: build.mutation<IDeleteArticleResponse, IDeleteArticleData>({
       query: ({ slug, token }) => ({
@@ -203,12 +202,15 @@ export const searchApi = createApi({
           Authorization: `Token ${token}`,
         },
       }),
-      async onQueryStarted({ slug, token }, { dispatch, queryFulfilled }) {
+      async onQueryStarted(
+        { slug, token, currentOffset },
+        { dispatch, queryFulfilled }
+      ) {
         const patchResult = dispatch(
           searchApi.util.updateQueryData(
             "getArticles",
             {
-              currentOffset: 0,
+              currentOffset: currentOffset,
               token: token,
             },
             (draft) => {
@@ -274,12 +276,15 @@ export const searchApi = createApi({
           Authorization: `Token ${token}`,
         },
       }),
-      async onQueryStarted({ slug, token }, { dispatch, queryFulfilled }) {
+      async onQueryStarted(
+        { slug, token, currentOffset },
+        { dispatch, queryFulfilled }
+      ) {
         const patchResult = dispatch(
           searchApi.util.updateQueryData(
             "getArticles",
             {
-              currentOffset: 0,
+              currentOffset: currentOffset,
               token: token,
             },
             (draft) => {
