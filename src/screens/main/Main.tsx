@@ -41,7 +41,11 @@ export default function Main() {
               path={path}
               element={
                 <div className={styles.articleListPaginationContainer}>
-                  <ArticleList articles={articles} isFetching={isFetching} />
+                  <ArticleList
+                    articles={articles}
+                    isFetching={isFetching}
+                    currentOffset={currentOffset}
+                  />
                   <Pagination
                     showSizeChanger={false}
                     current={currentPage}
