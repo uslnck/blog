@@ -84,11 +84,23 @@ export default function ArticleInside() {
 
   const [hasLikedInside, setHasLikedInside] = useState(false);
 
+  const [articleFavoritedInside, setArticleFavoritedInside] =
+    useState(articleFavorited);
+  const [articleLikesInside, setArticleLikesInside] =
+    useState(articleLikesCount);
+
+  useEffect(() => {
+    setArticleFavoritedInside(articleFavorited);
+    setArticleLikesInside(articleLikesCount);
+  }, [articleLikesCount, articleFavorited]);
+
   const handleLikeInside = async () => {
     if (hasLikedInside) {
-      if (!articleFavorited) {
+      if (!articleFavoritedInside) {
         console.log("(повторное) при лайке внутри");
         setHasLikedInside(false);
+        setArticleLikesInside((prev) => prev + 1);
+        setArticleFavoritedInside(true);
         await likeArticle({
           slug: slugInState,
           token: token,
@@ -97,6 +109,8 @@ export default function ArticleInside() {
       } else {
         console.log("(повторное) при анлайке внутри");
         setHasLikedInside(false);
+        setArticleLikesInside((prev) => prev - 1);
+        setArticleFavoritedInside(false);
         await unlikeArticle({
           slug: slugInState,
           token: token,
@@ -104,9 +118,11 @@ export default function ArticleInside() {
         });
       }
     } else {
-      if (articleFavorited) {
+      if (articleFavoritedInside) {
         console.log("при анлайке внутри");
         setHasLikedInside(true);
+        setArticleLikesInside((prev) => prev - 1);
+        setArticleFavoritedInside(false);
         await unlikeArticle({
           slug: slugInState,
           token: token,
@@ -115,6 +131,8 @@ export default function ArticleInside() {
       } else {
         console.log("при лайке внутри");
         setHasLikedInside(true);
+        setArticleLikesInside((prev) => prev + 1);
+        setArticleFavoritedInside(true);
         await likeArticle({
           slug: slugInState,
           token: token,
@@ -137,8 +155,8 @@ export default function ArticleInside() {
             <Like
               handleLike={handleLikeInside}
               isLoading={unlikeLoading || likeLoading}
-              articleFavorited={articleFavorited}
-              articleLikesCount={articleLikesCount}
+              articleFavorited={articleFavoritedInside}
+              articleLikesCount={articleLikesInside}
             />
           </div>
           <ul className={styles.tagInsideContainer}>

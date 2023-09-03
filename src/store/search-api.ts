@@ -32,7 +32,7 @@ const staggeredBaseQueryWithBailOut = retry(
       retry.fail(result.error);
     }
     if (result.error?.status === 401) {
-      console.log("Unauthorized (or pseudo may've been used)");
+      console.log("Unauthorized");
       retry.fail(result.error);
     }
     if (result.error?.status === 500) {
@@ -59,9 +59,7 @@ export const searchApi = createApi({
           "Content-Type": "application/json",
         },
       }),
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-
+      providesTags: ["Article"],
       // providesTags: (result) =>
       //   result
       //     ? [
