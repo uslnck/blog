@@ -89,6 +89,7 @@ export default function Article({
               title,
               updatedAt,
               currentOffset,
+              token,
             }}
           >
             {title}

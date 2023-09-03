@@ -100,4 +100,5 @@ export interface IArticleProps {
     following: boolean;
   };
   currentOffset: number;
+  token: string;
 }

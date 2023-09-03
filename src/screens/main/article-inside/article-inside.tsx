@@ -15,8 +15,6 @@ import { Spin } from "antd";
 import BorderedButton from "../../../components/bordered-button";
 import Like from "../../../components/like";
 
-const token = localStorage.getItem("token") as string;
-
 export default function ArticleInside() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -33,6 +31,7 @@ export default function ArticleInside() {
     title,
     favorited,
     currentOffset,
+    token,
   } = state || {};
 
   const [slugInState, setSlugInState] = useState(slug || "");
@@ -40,7 +39,7 @@ export default function ArticleInside() {
 
   useEffect(() => {
     if (!state) {
-      setSlugInState(getSlug() as string);
+      setSlugInState(getSlug());
       setSkip(false);
     }
   }, [state]);
