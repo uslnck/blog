@@ -3,8 +3,7 @@ import styles from "./like.module.less";
 
 export default function Like({
   handleLike,
-  likeLoading,
-  unlikeLoading,
+  isLoading,
   articleFavorited,
   articleLikesCount,
 }: ILikeProps) {
@@ -13,9 +12,7 @@ export default function Like({
       <button
         onClick={() => void handleLike()}
         className={styles.likeInsideButton}
-        disabled={
-          !localStorage.getItem("token") || likeLoading || unlikeLoading
-        }
+        disabled={!localStorage.getItem("token") || isLoading}
       >
         <img
           src={

@@ -32,7 +32,7 @@ const staggeredBaseQueryWithBailOut = retry(
       retry.fail(result.error);
     }
     if (result.error?.status === 401) {
-      console.log("Unauthorized");
+      console.log("Unauthorized (or pseudo may've been used)");
       retry.fail(result.error);
     }
     if (result.error?.status === 500) {
@@ -48,7 +48,7 @@ const staggeredBaseQueryWithBailOut = retry(
 export const searchApi = createApi({
   reducerPath: "searchApi",
   baseQuery: staggeredBaseQueryWithBailOut,
-  tagTypes: ["Articles", "Single article"],
+  tagTypes: ["Article"],
   endpoints: (build) => ({
     getArticles: build.query<IGetArticlesResponse, IGetArticlesData>({
       query: ({ currentOffset, token }) => ({
@@ -59,7 +59,19 @@ export const searchApi = createApi({
           "Content-Type": "application/json",
         },
       }),
-      providesTags: ["Articles"],
+
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      providesTags: (result) =>
+        result
+          ? [
+              result.articles.map(({ slug }) => ({
+                type: "Article",
+                id: slug,
+              })),
+              { type: "Article", id: "LIST" },
+            ]
+          : [{ type: "Article", id: "LIST" }],
     }),
     createUser: build.mutation<ISignResponse, IFormData>({
       query: (formData) => ({
@@ -107,7 +119,7 @@ export const searchApi = createApi({
         },
         body: { article: formData },
       }),
-      invalidatesTags: ["Articles"],
+      invalidatesTags: ["Article"],
     }),
     getArticle: build.query<IArticleResponse, IGetArticleData>({
       query: ({ slug, token }) => {
@@ -120,6 +132,8 @@ export const searchApi = createApi({
           },
         };
       },
+      // providesTags: ["Article"],
+      providesTags: (_, __, arg) => [{ type: "Article", id: arg.slug }],
     }),
     editArticle: build.mutation<IArticleResponse, IEditArticleData>({
       query: ({ formData, token, slug }) => ({
@@ -131,7 +145,8 @@ export const searchApi = createApi({
         },
         body: { article: formData },
       }),
-      invalidatesTags: ["Articles"],
+      // invalidatesTags: ["Article"],
+      // invalidatesTags: (_, __, arg) => [{ type: "Article", id: arg.slug }],
     }),
     deleteArticle: build.mutation<IDeleteArticleResponse, IDeleteArticleData>({
       query: ({ slug, token }) => ({
@@ -141,7 +156,7 @@ export const searchApi = createApi({
           Authorization: `Token ${token}`,
         },
       }),
-      invalidatesTags: ["Articles"],
+      invalidatesTags: ["Article"],
     }),
     likeArticle: build.mutation<IArticleResponse, ILikeArticleData>({
       query: ({ slug, token }) => ({
@@ -151,6 +166,34 @@ export const searchApi = createApi({
           Authorization: `Token ${token}`,
         },
       }),
+      async onQueryStarted(
+        { slug, token, currentOffset },
+        { dispatch, queryFulfilled }
+      ) {
+        const patchResult = dispatch(
+          searchApi.util.updateQueryData(
+            "getArticles",
+            {
+              currentOffset: currentOffset,
+              token: token,
+            },
+            (draft) => {
+              draft.articles = draft.articles.map((article) => {
+                if (article.slug === slug) {
+                  article.favoritesCount += 1;
+                  article.favorited = true;
+                }
+                return article;
+              });
+            }
+          )
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
     }),
     likeArticleInside: build.mutation<IArticleResponse, ILikeArticleData>({
       query: ({ slug, token }) => ({
@@ -160,7 +203,31 @@ export const searchApi = createApi({
           Authorization: `Token ${token}`,
         },
       }),
-      invalidatesTags: ["Articles"],
+      async onQueryStarted({ slug, token }, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          searchApi.util.updateQueryData(
+            "getArticles",
+            {
+              currentOffset: 0,
+              token: token,
+            },
+            (draft) => {
+              draft.articles = draft.articles.map((article) => {
+                if (article.slug === slug) {
+                  article.favoritesCount += 1;
+                  article.favorited = true;
+                }
+                return article;
+              });
+            }
+          )
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
     }),
     unlikeArticle: build.mutation<IArticleResponse, IUnlikeArticleData>({
       query: ({ slug, token }) => ({
@@ -170,6 +237,34 @@ export const searchApi = createApi({
           Authorization: `Token ${token}`,
         },
       }),
+      async onQueryStarted(
+        { slug, token, currentOffset },
+        { dispatch, queryFulfilled }
+      ) {
+        const patchResult = dispatch(
+          searchApi.util.updateQueryData(
+            "getArticles",
+            {
+              currentOffset: currentOffset,
+              token: token,
+            },
+            (draft) => {
+              draft.articles = draft.articles.map((article) => {
+                if (article.slug === slug) {
+                  article.favoritesCount -= 1;
+                  article.favorited = false;
+                }
+                return article;
+              });
+            }
+          )
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
     }),
     unlikeArticleInside: build.mutation<IArticleResponse, IUnlikeArticleData>({
       query: ({ slug, token }) => ({
@@ -179,7 +274,31 @@ export const searchApi = createApi({
           Authorization: `Token ${token}`,
         },
       }),
-      invalidatesTags: ["Articles"],
+      async onQueryStarted({ slug, token }, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          searchApi.util.updateQueryData(
+            "getArticles",
+            {
+              currentOffset: 0,
+              token: token,
+            },
+            (draft) => {
+              draft.articles = draft.articles.map((article) => {
+                if (article.slug === slug) {
+                  article.favoritesCount -= 1;
+                  article.favorited = false;
+                }
+                return article;
+              });
+            }
+          )
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
     }),
   }),
 });

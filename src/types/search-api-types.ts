@@ -18,11 +18,13 @@ export interface IGetArticleData {
 export interface ILikeArticleData {
   slug: string;
   token: string;
+  currentOffset: number;
 }
 
 export interface IUnlikeArticleData {
   slug: string;
   token: string;
+  currentOffset: number;
 }
 
 export interface ILoginData {

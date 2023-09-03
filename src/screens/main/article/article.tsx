@@ -3,14 +3,12 @@ import UserInfo from "../user-info";
 import { IArticleProps } from "../../../types";
 import { Link } from "react-router-dom";
 import Like from "../../../components/like";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import {
   useLikeArticleMutation,
   useUnlikeArticleMutation,
 } from "../../../store";
-import { selectProperFavoritedStatus } from "./utils";
 
-let isLikeClicked = false;
 const token = localStorage.getItem("token") as string;
 
 export default function Article({
@@ -24,71 +22,49 @@ export default function Article({
   tagList,
   title,
   updatedAt,
+  currentOffset,
 }: IArticleProps) {
-  const [articleLikesCount, setArticleLikesCount] = useState(favoritesCount);
   const [hasLiked, setHasLiked] = useState(false);
-  const [pseudoFavorited, setPseudoFavorited] = useState(false);
 
-  const [likeArticle, { data: likeObject, isLoading: likeLoading }] =
-    useLikeArticleMutation();
-
-  const [unlikeArticle, { data: unlikeObject, isLoading: unlikeLoading }] =
+  const [likeArticle, { isLoading: likeLoading }] = useLikeArticleMutation();
+  const [unlikeArticle, { isLoading: unlikeLoading }] =
     useUnlikeArticleMutation();
 
-  const isFirstRender = useRef(true);
-  const isLike = useRef(false);
-  const isUnlike = useRef(false);
-
-  useEffect(() => {
-    if (!isFirstRender.current) setPseudoFavorited(true);
-    isLike.current = true;
-  }, [likeObject]);
-
-  useEffect(() => {
-    if (!isFirstRender.current) setPseudoFavorited(false);
-    isUnlike.current = true;
-  }, [unlikeObject]);
-
-  useEffect(() => {
-    if (isLike.current && isUnlike.current) isFirstRender.current = false;
-  }, [likeObject, unlikeObject]);
-
   const handleLike = async () => {
-    isLikeClicked = true;
     if (hasLiked) {
-      if (favorited) {
+      if (!favorited) {
         console.log("(повторное) при лайке в списке");
         setHasLiked(false);
-        setArticleLikesCount((prev) => prev + 1);
         await likeArticle({
           slug: slug,
           token: token,
+          currentOffset: currentOffset,
         });
       } else {
         console.log("(повторное) при анлайке в списке");
         setHasLiked(false);
-        setArticleLikesCount((prev) => prev - 1);
         await unlikeArticle({
           slug: slug,
           token: token,
+          currentOffset: currentOffset,
         });
       }
     } else {
       if (favorited) {
         console.log("при анлайке в списке");
         setHasLiked(true);
-        setArticleLikesCount((prev) => prev - 1);
         await unlikeArticle({
           slug: slug,
           token: token,
+          currentOffset: currentOffset,
         });
       } else {
         console.log("при лайке в списке");
         setHasLiked(true);
-        setArticleLikesCount((prev) => prev + 1);
         await likeArticle({
           slug: slug,
           token: token,
+          currentOffset: currentOffset,
         });
       }
     }
@@ -101,36 +77,27 @@ export default function Article({
           <Link
             to={`/articles/${slug}`}
             className={styles.articleTitle}
-            onClick={() => console.log("reload article list")}
             state={{
               author,
               body,
               createdAt,
               description,
-              favorited: selectProperFavoritedStatus(
-                isLikeClicked,
-                favorited,
-                pseudoFavorited
-              ),
-              favoritesCount: articleLikesCount,
+              favorited,
+              favoritesCount,
               slug,
               tagList,
               title,
               updatedAt,
+              currentOffset,
             }}
           >
             {title}
           </Link>
           <Like
             handleLike={handleLike}
-            likeLoading={likeLoading}
-            unlikeLoading={unlikeLoading}
-            articleFavorited={selectProperFavoritedStatus(
-              isLikeClicked,
-              favorited,
-              pseudoFavorited
-            )}
-            articleLikesCount={articleLikesCount}
+            isLoading={likeLoading || unlikeLoading}
+            articleFavorited={favorited}
+            articleLikesCount={favoritesCount}
           />
         </div>
         <ul className={styles.tagContainer}>

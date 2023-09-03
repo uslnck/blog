@@ -6,6 +6,7 @@ import { IArticleListProps } from "../../../types";
 export default function ArticleList({
   articles,
   isFetching,
+  currentOffset,
 }: IArticleListProps) {
   return (
     <>
@@ -20,7 +21,9 @@ export default function ArticleList({
             }}
           />
         ) : (
-          articles.map((article, i) => <Article key={i} {...article} />)
+          articles.map((article, i) => (
+            <Article key={i} {...article} currentOffset={currentOffset} />
+          ))
         )}
       </ul>
     </>
