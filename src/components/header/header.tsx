@@ -65,7 +65,10 @@ export default function Header({ handlePseudoInside, isInside }) {
       <div className={styles.headerContainer}>
         <button
           className={styles.title}
-          onClick={slug ? () => handlePseudoInside(slug) : () => navigate("/")}
+          onClick={() => {
+            handlePseudoInside(slug);
+            navigate("/articles");
+          }}
         >
           Realworld Blog
         </button>

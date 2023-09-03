@@ -50,6 +50,15 @@ export default function Article({
   const [unlikeArticle, { isLoading: unlikeLoading }] =
     useUnlikeArticleMutation();
 
+  // useEffect(() => {
+  //   return () => {
+  //     setPseudoFavoritesCount(favoritesCount);
+  //     setPseudoFavorited(favorited);
+  //     setHasLiked(false);
+  //     isLikeClicked = false;
+  //   };
+  // }, [favorited, favoritesCount]);
+
   const handleLike = async () => {
     isLikeClicked = true;
     if (hasLiked) {

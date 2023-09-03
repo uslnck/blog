@@ -24,6 +24,7 @@ export default function Main({
   handlePageChange,
   currentPage,
   pageSize,
+  target,
 }) {
   let isRenderSingleArticle = false;
   isInside.forEach((item) => {
@@ -46,10 +47,10 @@ export default function Main({
                 <div className={styles.articleListPaginationContainer}>
                   <ArticleList
                     handlePseudoInside={handlePseudoInside}
-                    isInside={isInside}
                     articles={articles}
                     isFetching={isFetching}
                     isRenderSingleArticle={isRenderSingleArticle}
+                    target={target}
                   />
                   {isRenderSingleArticle ? null : (
                     <Pagination

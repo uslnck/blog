@@ -11,17 +11,10 @@ import { IArticleListProps } from "../../../types";
 export default function ArticleList({
   articles,
   isFetching,
-  isInside,
   handlePseudoInside,
   isRenderSingleArticle,
+  target,
 }: IArticleListProps) {
-  const target = articles.findIndex((article) => {
-    const matchingFirstArrayItem = isInside.find(
-      (item) => item.slug === article.slug
-    );
-    return matchingFirstArrayItem && matchingFirstArrayItem.inside === true;
-  });
-
   return (
     <>
       <ul className={styles.articleList}>
@@ -38,7 +31,7 @@ export default function ArticleList({
           articles.map((article, i) =>
             isRenderSingleArticle && i > 0 ? null : (
               <Article
-                key={i}
+                key={article.slug}
                 {...(isRenderSingleArticle
                   ? { ...articles[target] }
                   : { ...article })}

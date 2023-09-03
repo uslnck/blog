@@ -11,6 +11,7 @@ export default function Blog() {
   const [currentOffset, setCurrentOffset] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [isInside, setIsInside] = useState([{ slug: "", inside: false }]);
+  const [target, setTarget] = useState(0);
 
   const handlePseudoInside = (slug: string) => {
     const target = isInside.indexOf(
@@ -19,6 +20,7 @@ export default function Blog() {
         inside: false,
       }
     );
+    setTarget(target);
 
     setIsInside((prev) => {
       return prev.map((item, i) => {
@@ -51,8 +53,8 @@ export default function Blog() {
     }
   }, [articles]);
 
-  // console.log("isInside", isInside);
-  console.log("articles", articles);
+  console.log("isInside", isInside);
+  // console.log("articles", articles);
 
   return (
     <>
@@ -66,6 +68,7 @@ export default function Blog() {
         articlesCount={articlesCount}
         currentPage={currentPage}
         pageSize={pageSize}
+        target={target}
       />
     </>
   );
