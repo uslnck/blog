@@ -5,7 +5,7 @@ export default function Like({
   handleLike,
   isLoading,
   articleFavorited,
-  articleFavoritesCount,
+  articleLikesCount,
 }: ILikeProps) {
   return (
     <div className={styles.articleInsideLikesContainer}>
@@ -21,7 +21,7 @@ export default function Like({
           alt="heart"
         />
       </button>
-      <span className={styles.likeInsideCount}>{articleFavoritesCount}</span>
+      <span className={styles.likeInsideCount}>{articleLikesCount}</span>
     </div>
   );
 }

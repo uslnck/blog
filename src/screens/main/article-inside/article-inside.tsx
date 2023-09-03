@@ -83,6 +83,7 @@ export default function ArticleInside() {
     useUnlikeArticleInsideMutation();
 
   const [hasLikedInside, setHasLikedInside] = useState(false);
+
   const handleLikeInside = async () => {
     if (hasLikedInside) {
       if (!articleFavorited) {
@@ -94,7 +95,7 @@ export default function ArticleInside() {
           currentOffset: currentOffset,
         });
       } else {
-        console.log("(повторно) при анлайке внутри");
+        console.log("(повторное) при анлайке внутри");
         setHasLikedInside(false);
         await unlikeArticle({
           slug: slugInState,
@@ -133,13 +134,6 @@ export default function ArticleInside() {
             <h5 className={styles.articleInsideTitle}>
               {title || article?.title}
             </h5>
-            {/* <Like
-              handleLike={handleLikeInside}
-              likeLoading={likeLoading}
-              unlikeLoading={unlikeLoading}
-              articleFavorited={state ? pseudoFavorited : article?.favorited}
-              articleFavoritesCount={articleLikesInside}
-            /> */}
             <Like
               handleLike={handleLikeInside}
               isLoading={unlikeLoading || likeLoading}

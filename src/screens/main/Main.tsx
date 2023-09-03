@@ -1,11 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-nocheck
 import { Pagination } from "antd";
 import ArticleList from "./article-list";
+import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import ArticleInside from "./article-inside";
 import SignIn from "./sign-in";
@@ -14,26 +9,27 @@ import UserProfile from "./user-profile";
 import NewArticle from "./new-article";
 import NotFound from "./not-found";
 import styles from "./Main.module.less";
+import { useGetArticlesQuery } from "../../store";
 
-export default function Main({
-  handlePseudoInside,
-  isInside,
-  articles,
-  articlesCount,
-  isFetching,
-  handlePageChange,
-  currentPage,
-  pageSize,
-  target,
-}) {
-  let isRenderSingleArticle = false;
-  isInside.forEach((item) => {
-    if (item.inside) {
-      isRenderSingleArticle = true;
-      return;
-    }
-    return isRenderSingleArticle;
-  });
+const pageSize = 5;
+const token = localStorage.getItem("token") as string;
+
+export default function Main() {
+  const [currentOffset, setCurrentOffset] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    setCurrentOffset((page - 1) * pageSize);
+  };
+
+  const {
+    data: articlesObject = { articles: [], articlesCount: 0 },
+    isFetching,
+  } = useGetArticlesQuery({ currentOffset, token });
+  const { articles, articlesCount } = articlesObject;
+
+  console.log(articles);
 
   return (
     <main>
@@ -58,16 +54,6 @@ export default function Main({
                     onChange={(page) => handlePageChange(page)}
                     style={{ marginBottom: "20px" }}
                   />
-                  {isRenderSingleArticle ? null : (
-                    <Pagination
-                      showSizeChanger={false}
-                      current={currentPage}
-                      pageSize={pageSize}
-                      total={articlesCount}
-                      onChange={(page) => handlePageChange(page)}
-                      style={{ marginBottom: "20px" }}
-                    />
-                  )}
                 </div>
               }
             />

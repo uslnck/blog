@@ -80,7 +80,7 @@ export interface ILikeProps {
   handleLike: () => Promise<void>;
   isLoading: boolean;
   articleFavorited: boolean;
-  articleFavoritesCount: number;
+  articleLikesCount: number;
 }
 
 export interface IArticleProps {
