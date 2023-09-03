@@ -1,16 +1,20 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-nocheck
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./header.module.less";
-// import { useSelector } from "react-redux";
-import { /*RootState*/ useGetUserQuery } from "../../store";
+import { useGetUserQuery } from "../../store";
 import { useEffect, useState } from "react";
 import { Spin } from "antd";
 import BorderedButton from "../bordered-button";
 
-export default function Header() {
+export default function Header({ handlePseudoInside, isInside }) {
   const [token, setToken] = useState("");
   const [skip, setSkip] = useState(true);
   const navigate = useNavigate();
-  // const { user } = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
     setToken(localStorage.getItem("token") as string);
@@ -27,6 +31,15 @@ export default function Header() {
     navigate("/");
     navigate(0);
   };
+
+  let slug = "";
+  isInside.forEach((item) => {
+    if (item.inside) {
+      slug = item.slug;
+      return;
+    }
+    return slug;
+  });
 
   if (!token)
     return (
@@ -50,9 +63,15 @@ export default function Header() {
   return (
     <header>
       <div className={styles.headerContainer}>
-        <Link className={styles.title} to={"/articles"}>
+        <button
+          className={styles.title}
+          onClick={() => {
+            handlePseudoInside(slug);
+            navigate("/articles");
+          }}
+        >
           Realworld Blog
-        </Link>
+        </button>
         {isFetching ? (
           <Spin />
         ) : (
