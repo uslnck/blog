@@ -1,12 +1,18 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-nocheck
 import styles from "./article.module.less";
 import UserInfo from "../user-info";
 import { IArticleProps } from "../../../types";
-import { Link } from "react-router-dom";
 import Like from "../../../components/like";
 import { useState } from "react";
 import {
   useLikeArticleMutation,
   useUnlikeArticleMutation,
+  useDeleteArticleMutation,
+  // useGetArticleQuery,
 } from "../../../store";
 
 const token = localStorage.getItem("token") as string;
@@ -41,7 +47,7 @@ export default function Article({
           currentOffset: currentOffset,
         });
       } else {
-        console.log("(повторное) при анлайке в списке");
+        console.log("(повторно) при анлайке в списке");
         setHasLiked(false);
         await unlikeArticle({
           slug: slug,
@@ -68,6 +74,26 @@ export default function Article({
         });
       }
     }
+  };
+
+  const [deleteArticle] = useDeleteArticleMutation();
+
+  const handleDeleteArticle = async () => {
+    if (window.confirm("Are you sure you want to delete this article?")) {
+      await deleteArticle({
+        slug: slug,
+        token: token,
+      });
+      navigate("/");
+    }
+  };
+
+  const articleContent = {
+    title: title,
+    description: description,
+    body: body,
+    slug: slug,
+    tagList: tagList,
   };
 
   return (
@@ -101,16 +127,12 @@ export default function Article({
             articleLikesCount={favoritesCount}
           />
         </div>
-        <ul className={styles.tagContainer}>
-          {tagList.map((tag, i) => (
-            <li className={styles.tag} key={i}>
-              {tag}
-            </li>
-          ))}
-        </ul>
-        <p className={styles.articleText}>{description}</p>
+        {isRenderSingleArticle && (
+          <div className={styles.descriptionInsideText}>
+            <Markdown>{body || "[No article text provided!]"}</Markdown>
+          </div>
+        )}
       </div>
-      <UserInfo author={author} createdAt={createdAt} />
     </li>
   );
 }

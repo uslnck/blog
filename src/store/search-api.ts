@@ -317,4 +317,5 @@ export const {
   useUnlikeArticleMutation,
   useUnlikeArticleInsideMutation,
   useLikeArticleInsideMutation,
+  usePseudoMutationMutation,
 } = searchApi;
