@@ -1,10 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
-import styles from "./sign-in.module.less";
+import styles from "./SignIn.module.less";
 import { SubmitHandler } from "react-hook-form";
 import { ILoginData } from "../../../types";
 import { useLoginUserMutation } from "../../../store";
 import { Spin } from "antd";
-import DynamicForm from "../../../components/form";
+import DynamicForm from "../../../components/Form";
 import { inputsProperties } from "./mock";
 
 export default function SignIn() {

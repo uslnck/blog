@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
-import { searchApi } from "./search-api";
-import userReducer from "./user-slice";
+import { searchApi } from "./searchApi";
+import userReducer from "./userSlice";
 
 const store = configureStore({
   reducer: {

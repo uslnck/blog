@@ -1,5 +1,5 @@
-import styles from "./article-inside.module.less";
-import UserInfo from "../user-info";
+import styles from "./ArticleInside.module.less";
+import UserInfo from "../UserInfo";
 import { useLocation, useNavigate } from "react-router-dom";
 import { IArticleProps, IArticleResponse } from "../../../types";
 import Markdown from "markdown-to-jsx";
@@ -12,8 +12,8 @@ import {
 import { getSlug } from "./utils";
 import { useEffect, useState } from "react";
 import { Spin } from "antd";
-import BorderedButton from "../../../components/bordered-button";
-import Like from "../../../components/like";
+import BorderedButton from "../../../components/BorderedButton";
+import Like from "../../../components/Like";
 
 export default function ArticleInside() {
   const navigate = useNavigate();
@@ -153,10 +153,10 @@ export default function ArticleInside() {
               {title || article?.title}
             </h5>
             <Like
-              handleLike={handleLikeInside}
+              onClick={handleLikeInside}
               isLoading={unlikeLoading || likeLoading}
-              articleFavorited={articleFavoritedInside}
-              articleLikesCount={articleLikesInside}
+              active={articleFavoritedInside}
+              count={articleLikesInside}
             />
           </div>
           <ul className={styles.tagInsideContainer}>

@@ -1,7 +1,7 @@
-import styles from "./tag.module.less";
+import styles from "./Tag.module.less";
 import { ITagsProps } from "../../types";
 import { useEffect, useState } from "react";
-import BorderedButton from "../bordered-button";
+import BorderedButton from "../BorderedButton";
 
 const maximumTags = 5;
 

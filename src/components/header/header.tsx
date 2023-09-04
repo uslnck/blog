@@ -1,9 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
-import styles from "./header.module.less";
+import styles from "./Header.module.less";
 import { useGetUserQuery } from "../../store";
 import { useEffect, useState } from "react";
 import { Spin } from "antd";
-import BorderedButton from "../bordered-button";
+import BorderedButton from "../BorderedButton";
 
 export default function Header() {
   const [token, setToken] = useState("");
@@ -71,7 +71,7 @@ export default function Header() {
                 </span>
                 <img
                   className={styles.image}
-                  src={userObject?.user.image}
+                  src={userObject?.user.image || "./public/avatar.png"}
                   alt="avatar"
                 />
               </div>

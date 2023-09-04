@@ -3,7 +3,7 @@ import { IUpdateFormData } from "../../../types";
 import { useUpdateUserMutation } from "../../../store";
 import { useNavigate } from "react-router-dom";
 import { Spin } from "antd";
-import DynamicForm from "../../../components/form";
+import DynamicForm from "../../../components/Form";
 import { inputsProperties } from "./mock";
 
 export default function UserProfile() {

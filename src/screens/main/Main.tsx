@@ -1,13 +1,13 @@
 import { Pagination } from "antd";
-import ArticleList from "./article-list";
+import ArticleList from "./ArticleList";
 import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
-import ArticleInside from "./article-inside";
-import SignIn from "./sign-in";
-import SignUp from "./sign-up";
-import UserProfile from "./user-profile";
-import NewArticle from "./new-article";
-import NotFound from "./not-found";
+import ArticleInside from "./ArticleInside";
+import SignIn from "./SignIn";
+import SignUp from "./SignUp";
+import UserProfile from "./UserProfile";
+import NewArticle from "./NewArticle";
+import NotFound from "./NotFound";
 import styles from "./Main.module.less";
 import { useGetArticlesQuery } from "../../store";
 

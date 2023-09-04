@@ -77,10 +77,10 @@ export interface IArticleListProps {
 }
 
 export interface ILikeProps {
-  handleLike: () => Promise<void>;
+  onClick: () => Promise<void>;
   isLoading: boolean;
-  articleFavorited: boolean;
-  articleLikesCount: number;
+  active: boolean;
+  count: number;
 }
 
 export interface IArticleProps {

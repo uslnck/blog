@@ -1,5 +1,5 @@
-import styles from "./article-list.module.less";
-import Article from "../article";
+import styles from "./ArticleList.module.less";
+import Article from "../Article";
 import { Spin } from "antd";
 import { IArticleListProps } from "../../../types";
 

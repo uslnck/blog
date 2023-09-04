@@ -1,9 +1,9 @@
 import { useForm, FormProvider } from "react-hook-form";
-import styles from "./form.module.less";
-import Input from "../input";
+import styles from "./Form.module.less";
+import Input from "../Input";
 import { DynamicFormProps } from "../../types";
 import { determineFormStyle } from "./utils";
-import Tag from "../tag";
+import Tag from "../Tag";
 
 export default function DynamicForm({
   formHeader,

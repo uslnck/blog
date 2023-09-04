@@ -1,3 +1,3 @@
-import DynamicForm from "./form";
+import DynamicForm from "./Form";
 
 export default DynamicForm;

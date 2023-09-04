@@ -1,14 +1,17 @@
 @import "../../main.less";
 
-.articleInsideLikesContainer {
+.articleLikesContainer {
   display: flex;
   height: 100%;
   align-items: center;
-  .likeInsideButton {
+  .likeButton {
     height: 16px;
     width: 16px;
+    &.disabled {
+      cursor: not-allowed;
+    }
   }
-  .likeInsideCount {
+  .likeCount {
     font-size: 12px;
     font-weight: 400;
     line-height: 22px;

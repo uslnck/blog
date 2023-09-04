@@ -6,7 +6,7 @@ import {
   useEditArticleMutation,
 } from "../../../store";
 import { addDefaultTags, addDefaultValues } from "./utils";
-import DynamicForm from "../../../components/form";
+import DynamicForm from "../../../components/Form";
 import { inputsProperties, tagsProperties } from "./mock";
 import { Spin } from "antd";
 

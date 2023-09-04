@@ -1,8 +1,8 @@
-import styles from "./article.module.less";
-import UserInfo from "../user-info";
+import styles from "./Article.module.less";
+import UserInfo from "../UserInfo";
 import { IArticleProps } from "../../../types";
 import { Link } from "react-router-dom";
-import Like from "../../../components/like";
+import Like from "../../../components/Like";
 import { useState } from "react";
 import {
   useLikeArticleMutation,
@@ -95,10 +95,10 @@ export default function Article({
             {title}
           </Link>
           <Like
-            handleLike={handleLike}
+            onClick={handleLike}
             isLoading={likeLoading || unlikeLoading}
-            articleFavorited={favorited}
-            articleLikesCount={favoritesCount}
+            active={favorited}
+            count={favoritesCount}
           />
         </div>
         <ul className={styles.tagContainer}>

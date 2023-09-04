@@ -1,27 +1,32 @@
 import { ILikeProps } from "../../types";
-import styles from "./like.module.less";
+import styles from "./Like.module.less";
+import { determineLikeDisabled } from "./utils";
 
 export default function Like({
-  handleLike,
+  onClick,
   isLoading,
-  articleFavorited,
-  articleLikesCount,
+  active,
+  count,
 }: ILikeProps) {
+  const isDisabled = determineLikeDisabled(isLoading);
+
   return (
-    <div className={styles.articleInsideLikesContainer}>
+    <div className={styles.articleLikesContainer}>
       <button
-        onClick={() => void handleLike()}
-        className={styles.likeInsideButton}
-        disabled={!localStorage.getItem("token") || isLoading}
+        onClick={() => void onClick()}
+        className={
+          isDisabled
+            ? `${styles.likeButton} ${styles.disabled}`
+            : styles.likeButton
+        }
+        disabled={isDisabled}
       >
         <img
-          src={
-            articleFavorited ? `${"../../liked.svg"}` : `${"../../heart.svg"}`
-          }
+          src={active ? `${"../../liked.svg"}` : `${"../../heart.svg"}`}
           alt="heart"
         />
       </button>
-      <span className={styles.likeInsideCount}>{articleLikesCount}</span>
+      <span className={styles.likeCount}>{count}</span>
     </div>
   );
 }

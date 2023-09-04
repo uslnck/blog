@@ -1,5 +1,5 @@
 import store from "./store";
 
 export * from "./store";
-export * from "./search-api";
+export * from "./searchApi";
 export default store;

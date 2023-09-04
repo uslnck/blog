@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { IBorderedButtonProps } from "../../types";
-import styles from "./bordered-button.module.less";
+import styles from "./BorderedButton.module.less";
 import { Link } from "react-router-dom";
 
 export default function BorderedButton({

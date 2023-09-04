@@ -1,5 +1,5 @@
 import { IUserInfo } from "../../../types";
-import styles from "./user-info.module.less";
+import styles from "./UserInfo.module.less";
 import { formatDate } from "../../../utils/helpers/date-fns";
 
 export default function UserInfo({ author, createdAt }: IUserInfo) {

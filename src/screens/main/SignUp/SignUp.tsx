@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
-import styles from "./sign-up.module.less";
+import styles from "./SignUp.module.less";
 import { SubmitHandler } from "react-hook-form";
 import { IFormData } from "../../../types";
 import { useCreateUserMutation } from "../../../store";
 import { useNavigate } from "react-router-dom";
 import { Spin } from "antd";
-import DynamicForm from "../../../components/form";
+import DynamicForm from "../../../components/Form";
 import { inputsProperties } from "./mock";
 
 export default function SignUp() {
