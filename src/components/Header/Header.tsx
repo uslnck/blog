@@ -71,7 +71,7 @@ export default function Header() {
                 </span>
                 <img
                   className={styles.image}
-                  src={userObject?.user.image || "./public/avatar.png"}
+                  src={userObject?.user.image || "./avatar.png"}
                   alt="avatar"
                 />
               </div>
